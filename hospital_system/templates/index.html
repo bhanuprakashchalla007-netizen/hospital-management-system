@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hospital Management System</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                #eef5ff,
+                #f8fbff
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #172033;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 20px;
+
+            background: #2563eb;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 36px;
+            font-weight: bold;
+
+            box-shadow: 0 12px 30px rgba(
+                37,
+                99,
+                235,
+                0.25
+            );
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
+        .portals {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+        }
+
+        .portal {
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 35px 25px;
+
+            border: 1px solid #e2e8f0;
+
+            box-shadow:
+                0 15px 40px rgba(
+                    15,
+                    23,
+                    42,
+                    0.08
+                );
+
+            transition: 0.25s;
+
+            cursor: pointer;
+        }
+
+        .portal:hover {
+            transform: translateY(-8px);
+
+            box-shadow:
+                0 20px 50px rgba(
+                    15,
+                    23,
+                    42,
+                    0.14
+                );
+        }
+
+        .icon {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 18px;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 34px;
+        }
+
+        .portal h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .portal p {
+            color: #64748b;
+
+            line-height: 1.6;
+
+            min-height: 52px;
+
+            margin-bottom: 25px;
+        }
+
+        .button {
+            display: block;
+
+            width: 100%;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background: #2563eb;
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .footer {
+            margin-top: 45px;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+        }
+
+        @media (max-width: 800px) {
+
+            .portals {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                margin-bottom: 30px;
+            }
+
+            .portal {
+                padding: 30px 20px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">
+            +
+        </div>
+
+        <h1>
+            Hospital Management System
+        </h1>
+
+        <p class="subtitle">
+            Welcome! Please select your portal to continue.
+        </p>
+
+
+        <div class="portals">
+
+            <!-- USER -->
+
+            <div class="portal">
+
+                <div class="icon">
+                    👤
+                </div>
+
+                <h2>
+                    User
+                </h2>
+
+                <p>
+                    Book appointments, view doctors,
+                    manage your profile and access
+                    your healthcare information.
+                </p>
+
+                <a
+                    href="/user"
+                    class="button"
+                >
+                    Continue as User
+                </a>
+
+            </div>
+
+
+            <!-- DOCTOR -->
+
+            <div class="portal">
+
+                <div class="icon">
+                    🩺
+                </div>
+
+                <h2>
+                    Doctor
+                </h2>
+
+                <p>
+                    Manage appointments, view patients,
+                    update medical information and
+                    manage your schedule.
+                </p>
+
+                <a
+                    href="/doctor"
+                    class="button"
+                >
+                    Continue as Doctor
+                </a>
+
+            </div>
+
+
+            <!-- MANAGEMENT -->
+
+            <div class="portal">
+
+                <div class="icon">
+                    🏥
+                </div>
+
+                <h2>
+                    Management
+                </h2>
+
+                <p>
+                    Manage patients, doctors,
+                    appointments, billing and
+                    hospital operations.
+                </p>
+
+                <a
+                    href="/dashboard"
+                    class="button"
+                >
+                    Continue as Management
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer">
+            © 2026 Hospital Management System
+        </div>
+
+    </div>
+
+</body>
+</html>

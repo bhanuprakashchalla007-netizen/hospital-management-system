@@ -1,0 +1,1253 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Dashboard | Hospital Management</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f5f8fc;
+            color: #172033;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .header {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e9f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 750;
+            font-size: 19px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #e8f1ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .doctor-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .doctor-name {
+            font-weight: 650;
+        }
+
+        .logout {
+            color: #dc3545;
+            text-decoration: none;
+            font-weight: 650;
+        }
+
+
+        /* ================= LAYOUT ================= */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+
+        .sidebar {
+            width: 235px;
+            background: white;
+            border-right: 1px solid #e5e9f0;
+            padding: 25px 15px;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            color: #8b95a7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 5px 12px 13px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            color: #59657a;
+            text-decoration: none;
+            font-weight: 550;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: #f1f5fb;
+            color: #2563eb;
+        }
+
+        .nav-item.active {
+            background: #eaf2ff;
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            flex: 1;
+            padding: 32px;
+            max-width: 1400px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 29px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #758095;
+        }
+
+
+        /* ================= STATS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 17px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 16px;
+            padding: 21px;
+        }
+
+        .stat-label {
+            color: #758095;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 27px;
+            font-weight: 750;
+        }
+
+        .stat-icon {
+            float: right;
+            font-size: 25px;
+        }
+
+
+        /* ================= CONTENT ================= */
+
+        .card {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 17px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 21px 23px;
+            border-bottom: 1px solid #edf0f4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+        }
+
+        .card-header p {
+            color: #7b8597;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+
+        /* ================= APPOINTMENTS ================= */
+
+        .appointment-list {
+            padding: 8px 22px 22px;
+        }
+
+        .appointment {
+            display: grid;
+            grid-template-columns:
+                90px
+                1fr
+                130px
+                210px;
+
+            align-items: center;
+            gap: 20px;
+
+            padding: 18px 5px;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .appointment:last-child {
+            border-bottom: none;
+        }
+
+        .time {
+            font-weight: 750;
+            color: #2563eb;
+        }
+
+        .patient-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .reason {
+            color: #7a8497;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status.pending {
+            background: #fff4d8;
+            color: #9a6a00;
+        }
+
+        .status.confirmed {
+            background: #e8f7ee;
+            color: #18834b;
+        }
+
+        .status.rejected {
+            background: #fff0f0;
+            color: #c62828;
+        }
+
+        .status.completed {
+            background: #e9f0ff;
+            color: #315fc2;
+        }
+
+
+        /* ================= BUTTONS ================= */
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .accept {
+            background: #e7f7ee;
+            color: #18834b;
+        }
+
+        .accept:hover {
+            background: #d7f0e2;
+        }
+
+        .reject {
+            background: #fff0f0;
+            color: #c62828;
+        }
+
+        .reject:hover {
+            background: #ffe0e0;
+        }
+
+        .view {
+            background: #edf3ff;
+            color: #2563eb;
+        }
+
+        .view:hover {
+            background: #dce9ff;
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            text-align: center;
+            padding: 55px 20px;
+            color: #7b8597;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+
+        /* ================= TOAST ================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            background: #172033;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            display: none;
+            z-index: 100;
+            font-size: 14px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:1000px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .appointment {
+                grid-template-columns:
+                    80px
+                    1fr
+                    100px;
+            }
+
+            .actions {
+                grid-column: 1 / -1;
+            }
+
+        }
+
+
+        @media(max-width:700px) {
+
+            .sidebar {
+                width: 70px;
+            }
+
+            .nav-text,
+            .nav-title {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+            }
+
+            .main {
+                padding: 20px 14px;
+            }
+
+            .header {
+                padding: 0 15px;
+            }
+
+            .doctor-name {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .appointment {
+                display: block;
+                padding: 18px 5px;
+            }
+
+            .time,
+            .patient,
+            .status-wrapper {
+                margin-bottom: 9px;
+            }
+
+            .actions {
+                margin-top: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🏥
+        </div>
+
+        <span>
+            Hospital Management
+        </span>
+
+    </div>
+
+
+    <div class="doctor-user">
+
+        <span
+            class="doctor-name"
+            id="doctorName">
+            Doctor
+        </span>
+
+        <a
+            href="/doctor/logout"
+            class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="layout">
+
+
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
+
+<aside class="sidebar">
+
+    <div class="nav-title">
+        Doctor Portal
+    </div>
+
+
+    <a
+        href="/doctor/dashboard"
+        class="nav-item active">
+
+        <span class="nav-icon">
+            🏠
+        </span>
+
+        <span class="nav-text">
+            Dashboard
+        </span>
+
+    </a>
+
+
+    <a
+        href="#appointments"
+        class="nav-item">
+
+        <span class="nav-icon">
+            📅
+        </span>
+
+        <span class="nav-text">
+            Appointments
+        </span>
+
+    </a>
+
+
+    <a
+        href="#patients"
+        class="nav-item">
+
+        <span class="nav-icon">
+            👥
+        </span>
+
+        <span class="nav-text">
+            Patients
+        </span>
+
+    </a>
+
+
+    <a
+        href="#profile"
+        class="nav-item">
+
+        <span class="nav-icon">
+            👤
+        </span>
+
+        <span class="nav-text">
+            Profile
+        </span>
+
+    </a>
+
+</aside>
+
+
+<!-- ============================================================
+     MAIN
+============================================================ -->
+
+<main class="main">
+
+
+    <div class="welcome">
+
+        <h1>
+            Good morning, Doctor 👋
+        </h1>
+
+        <p>
+            Here's what's happening with your patients today.
+        </p>
+
+    </div>
+
+
+    <!-- ========================================================
+         STATISTICS
+    ========================================================= -->
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <span class="stat-icon">
+                📅
+            </span>
+
+            <div class="stat-label">
+                Today's Appointments
+            </div>
+
+            <div
+                class="stat-number"
+                id="todayCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <span class="stat-icon">
+                ⏳
+            </span>
+
+            <div class="stat-label">
+                Pending Requests
+            </div>
+
+            <div
+                class="stat-number"
+                id="pendingCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <span class="stat-icon">
+                👥
+            </span>
+
+            <div class="stat-label">
+                Total Patients
+            </div>
+
+            <div
+                class="stat-number"
+                id="patientCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <span class="stat-icon">
+                ✅
+            </span>
+
+            <div class="stat-label">
+                Completed
+            </div>
+
+            <div
+                class="stat-number"
+                id="completedCount">
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         APPOINTMENTS
+    ========================================================= -->
+
+    <section
+        class="card"
+        id="appointments">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h2>
+                    Today's Appointments
+                </h2>
+
+                <p>
+                    Review and manage your patient appointments.
+                </p>
+
+            </div>
+
+            <button
+                class="btn view"
+                onclick="loadAppointments()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div
+            class="appointment-list"
+            id="appointmentList">
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ⏳
+                </div>
+
+                Loading appointments...
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast">
+</div>
+
+
+<script>
+
+/* ============================================================
+   LOAD APPOINTMENTS
+============================================================ */
+
+async function loadAppointments() {
+
+    const list =
+        document.getElementById(
+            "appointmentList"
+        );
+
+
+    list.innerHTML = `
+        <div class="empty">
+            <div class="empty-icon">⏳</div>
+            Loading appointments...
+        </div>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/doctor/appointments"
+            );
+
+
+        if (response.status === 401) {
+
+            window.location.href =
+                "/doctor/login";
+
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            showEmpty(
+                data.message ||
+                "Unable to load appointments."
+            );
+
+            return;
+        }
+
+
+        displayAppointments(
+            data.appointments || []
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showEmpty(
+            "Unable to connect to the server."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   DISPLAY APPOINTMENTS
+============================================================ */
+
+function displayAppointments(
+    appointments
+) {
+
+    const list =
+        document.getElementById(
+            "appointmentList"
+        );
+
+
+    updateStatistics(
+        appointments
+    );
+
+
+    if (
+        !appointments ||
+        appointments.length === 0
+    ) {
+
+        showEmpty(
+            "No appointments found."
+        );
+
+        return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    appointments.forEach(
+        appointment => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "appointment";
+
+
+            const status =
+                appointment.status ||
+                "Pending";
+
+
+            const statusClass =
+                status
+                    .toLowerCase()
+                    .replaceAll(
+                        " ",
+                        "-"
+                    );
+
+
+            item.innerHTML = `
+
+                <div class="time">
+                    ${escapeHTML(
+                        appointment.time_slot ||
+                        appointment.time ||
+                        "--"
+                    )}
+                </div>
+
+
+                <div class="patient">
+
+                    <div class="patient-name">
+                        👤
+                        ${escapeHTML(
+                            appointment.patient_name ||
+                            "Patient"
+                        )}
+                    </div>
+
+                    <div class="reason">
+                        ${escapeHTML(
+                            appointment.reason ||
+                            "No reason provided"
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="status-wrapper">
+
+                    <span class="status ${statusClass}">
+                        ${escapeHTML(status)}
+                    </span>
+
+                </div>
+
+
+                <div class="actions">
+
+                    ${
+                        status === "Pending"
+                        ? `
+                            <button
+                                class="btn accept"
+                                onclick="updateAppointment(
+                                    '${escapeJS(appointment.id)}',
+                                    'Confirmed'
+                                )">
+                                ✓ Accept
+                            </button>
+
+                            <button
+                                class="btn reject"
+                                onclick="updateAppointment(
+                                    '${escapeJS(appointment.id)}',
+                                    'Rejected'
+                                )">
+                                ✕ Reject
+                            </button>
+                        `
+                        : ""
+                    }
+
+
+                    <button
+                        class="btn view"
+                        onclick="viewPatient(
+                            '${escapeJS(appointment.id)}'
+                        )">
+                        View Patient
+                    </button>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(item);
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   UPDATE APPOINTMENT
+============================================================ */
+
+async function updateAppointment(
+    appointmentId,
+    status
+) {
+
+    const action =
+        status === "Confirmed"
+        ? "accept"
+        : "reject";
+
+
+    const confirmed =
+        confirm(
+            status === "Confirmed"
+            ? "Accept this appointment?"
+            : "Reject this appointment?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/doctor/appointment-status",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        appointment_id:
+                            appointmentId,
+
+                        status:
+                            status
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            showToast(
+                data.message ||
+                "Unable to update appointment."
+            );
+
+            return;
+        }
+
+
+        showToast(
+            status === "Confirmed"
+            ? "✅ Appointment confirmed."
+            : "❌ Appointment rejected."
+        );
+
+
+        loadAppointments();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Unable to connect to the server."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   VIEW PATIENT
+============================================================ */
+
+function viewPatient(
+    appointmentId
+) {
+
+    /*
+     * We'll connect this to the Patient Details
+     * page in the next step.
+     */
+
+    window.location.href =
+        "/doctor/patient/" +
+        encodeURIComponent(
+            appointmentId
+        );
+
+}
+
+
+/* ============================================================
+   STATISTICS
+============================================================ */
+
+function updateStatistics(
+    appointments
+) {
+
+    let pending = 0;
+
+    let completed = 0;
+
+    const patients =
+        new Set();
+
+
+    appointments.forEach(
+        appointment => {
+
+            const status =
+                appointment.status ||
+                "Pending";
+
+
+            if (status === "Pending") {
+                pending++;
+            }
+
+
+            if (status === "Completed") {
+                completed++;
+            }
+
+
+            if (
+                appointment.patient_id ||
+                appointment.patient_name
+            ) {
+
+                patients.add(
+                    appointment.patient_id ||
+                    appointment.patient_name
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "pendingCount"
+    ).textContent = pending;
+
+
+    document.getElementById(
+        "completedCount"
+    ).textContent = completed;
+
+
+    document.getElementById(
+        "patientCount"
+    ).textContent =
+        patients.size;
+
+
+    document.getElementById(
+        "todayCount"
+    ).textContent =
+        appointments.length;
+
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+function showEmpty(
+    message
+) {
+
+    document.getElementById(
+        "appointmentList"
+    ).innerHTML = `
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📅
+            </div>
+
+            ${escapeHTML(message)}
+
+        </div>
+
+    `;
+
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+function showToast(
+    message
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.style.display =
+        "block";
+
+
+    setTimeout(
+        () => {
+            toast.style.display =
+                "none";
+        },
+        3000
+    );
+
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHTML(
+    value
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* ============================================================
+   ESCAPE JAVASCRIPT
+============================================================ */
+
+function escapeJS(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+    .replaceAll(
+        "\\",
+        "\\\\"
+    )
+    .replaceAll(
+        "'",
+        "\\'"
+    );
+
+}
+
+
+/* ============================================================
+   START
+============================================================ */
+
+loadAppointments();
+
+</script>
+
+</body>
+
+</html>
+```

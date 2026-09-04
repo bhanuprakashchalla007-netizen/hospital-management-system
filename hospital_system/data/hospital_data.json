@@ -1,205 +1,271 @@
 {
-  "hospital": "City General Hospital",
-  "patients": [
-    {
-      "id": 1001,
-      "name": "Ravi Kumar",
-      "age": 35,
-      "phone": "9876543210",
-      "disease": "Diabetes",
-      "blood_group": "B+",
-      "admission_date": "2026-04-20"
+    "hospital": "City General Hospital",
+    "patients": [
+        {
+            "id": 1001,
+            "name": "Ravi Kumar",
+            "age": 35,
+            "phone": "9876543210",
+            "disease": "Diabetes",
+            "blood_group": "B+",
+            "admission_date": "2026-04-20"
+        },
+        {
+            "id": 1002,
+            "name": "Priya Sharma",
+            "age": 28,
+            "phone": "9123456780",
+            "disease": "Hypertension",
+            "blood_group": "A+",
+            "admission_date": "2026-04-21"
+        },
+        {
+            "id": 1003,
+            "name": "Arun Raj",
+            "age": 52,
+            "phone": "9988776655",
+            "disease": "Cardiac Arrest",
+            "blood_group": "O+",
+            "admission_date": "2026-04-22"
+        },
+        {
+            "id": 1004,
+            "name": "Meena Devi",
+            "age": 44,
+            "phone": "9001122334",
+            "disease": "Fracture",
+            "blood_group": "AB-",
+            "admission_date": "2026-04-23"
+        },
+        {
+            "id": 1005,
+            "name": "Suresh Babu",
+            "age": 60,
+            "phone": "9876001122",
+            "disease": "Diabetes",
+            "blood_group": "B-",
+            "admission_date": "2026-04-25"
+        }
+    ],
+    "doctors": [
+        {
+            "id": 2001,
+            "name": "Dr. Anitha Rao",
+            "age": 45,
+            "phone": "9000111222",
+            "specialization": "Cardiologist",
+            "department": "Cardiology",
+            "consultation_fee": 800.0
+        },
+        {
+            "id": 2002,
+            "name": "Dr. Kiran Bose",
+            "age": 38,
+            "phone": "9111222333",
+            "specialization": "Diabetologist",
+            "department": "Endocrinology",
+            "consultation_fee": 600.0
+        },
+        {
+            "id": 2003,
+            "name": "Dr. Pradeep Nair",
+            "age": 50,
+            "phone": "9222333444",
+            "specialization": "Orthopedic",
+            "department": "Orthopaedics",
+            "consultation_fee": 700.0
+        },
+        {
+            "id": 2004,
+            "name": "Dr Reena Sharma ",
+            "age": 38,
+            "phone": "9976459067",
+            "specialization": "General Medicine",
+            "department": "Medicine",
+            "consultation_fee": 500.0
+        },
+        {
+            "id": 2005,
+            "name": "0",
+            "age": 0,
+            "phone": "0",
+            "specialization": "0",
+            "department": "0",
+            "consultation_fee": 0.0
+        }
+    ],
+    "appointments": [
+        {
+            "id": 3001,
+            "patient_id": 1001,
+            "doctor_id": 2002,
+            "patient_name": "Ravi Kumar",
+            "doctor_name": "Dr. Kiran Bose",
+            "date": "2026-04-24",
+            "time_slot": "10:00 AM",
+            "status": "Completed"
+        },
+        {
+            "id": 3002,
+            "patient_id": 1002,
+            "doctor_id": 2001,
+            "patient_name": "Priya Sharma",
+            "doctor_name": "Dr. Anitha Rao",
+            "date": "2026-04-25",
+            "time_slot": "11:00 AM",
+            "status": "Scheduled"
+        },
+        {
+            "id": 3003,
+            "patient_id": 1003,
+            "doctor_id": 2001,
+            "patient_name": "Arun Raj",
+            "doctor_name": "Dr. Anitha Rao",
+            "date": "2026-04-26",
+            "time_slot": "09:00 AM",
+            "status": "Scheduled"
+        },
+        {
+            "id": 3004,
+            "patient_id": 1004,
+            "doctor_id": 2003,
+            "patient_name": "Meena Devi",
+            "doctor_name": "Dr. Pradeep Nair",
+            "date": "2026-04-26",
+            "time_slot": "02:00 PM",
+            "status": "Cancelled"
+        },
+        {
+            "id": 3005,
+            "patient_id": 1005,
+            "doctor_id": 2002,
+            "patient_name": "Suresh Babu",
+            "doctor_name": "Dr. Kiran Bose",
+            "date": "2026-04-27",
+            "time_slot": "03:00 PM",
+            "status": "Scheduled"
+        },
+        {
+            "id": 3006,
+            "patient_name": "bhanu",
+            "doctor_id": 2001,
+            "doctor_name": "Dr. Anitha Rao",
+            "date": "2026-09-02",
+            "time_slot": "09:00 AM",
+            "status": "Scheduled",
+            "created_at": "2026-09-01T19:35:08.622032"
+        },
+        {
+            "id": 3007,
+            "patient_name": "bhanu",
+            "doctor_id": 2004,
+            "doctor_name": "Dr Reena Sharma ",
+            "date": "2026-09-01",
+            "time_slot": "09:00 AM",
+            "status": "Scheduled",
+            "created_at": "2026-09-01T19:38:06.850155"
+        },
+        {
+            "id": 3008,
+            "patient_name": "bhanu",
+            "doctor_id": 2004,
+            "doctor_name": "Dr Reena Sharma ",
+            "date": "2026-11-27",
+            "time_slot": "10:00 AM",
+            "status": "Scheduled",
+            "created_at": "2026-09-01T21:23:59.537744"
+        },
+        {
+            "id": 3009,
+            "patient_name": "bhanu",
+            "doctor_id": 2001,
+            "doctor_name": "Dr. Anitha Rao",
+            "date": "2026-09-04",
+            "time_slot": "09:00 AM",
+            "status": "Scheduled",
+            "created_at": "2026-09-03T23:49:04.627458"
+        },
+        {
+            "id": "APT_1788501896936",
+            "user_id": 1,
+            "patient_name": "Bhanu Prakash Challa",
+            "patient_id": 1,
+            "doctor_id": "2001",
+            "doctor_name": "Dr. Anitha Rao",
+            "specialization": "Cardiologist",
+            "date": "2026-09-04",
+            "time_slot": "10:00 AM",
+            "status": "Booked",
+            "created_at": "2026-09-04T11:34:56.936928"
+        }
+    ],
+    "bills": [
+        {
+            "id": 4001,
+            "patient_id": 1001,
+            "patient_name": "Ravi Kumar",
+            "doctor_name": "Dr. Kiran Bose",
+            "consultation_fee": 600.0,
+            "medicine_cost": 350.0,
+            "room_charge": 1200.0,
+            "total_amount": 2150.0,
+            "is_paid": true,
+            "bill_date": "2026-04-28"
+        },
+        {
+            "id": 4002,
+            "patient_id": 1002,
+            "patient_name": "Priya Sharma",
+            "doctor_name": "Dr. Anitha Rao",
+            "consultation_fee": 800.0,
+            "medicine_cost": 200.0,
+            "room_charge": 1500.0,
+            "total_amount": 2500.0,
+            "is_paid": false,
+            "bill_date": "2026-04-28"
+        },
+        {
+            "id": 4003,
+            "patient_id": 1003,
+            "patient_name": "Arun Raj",
+            "doctor_name": "Dr. Anitha Rao",
+            "consultation_fee": 800.0,
+            "medicine_cost": 500.0,
+            "room_charge": 2000.0,
+            "total_amount": 3300.0,
+            "is_paid": false,
+            "bill_date": "2026-04-28"
+        },
+        {
+            "id": 4004,
+            "patient_id": 1004,
+            "patient_name": "Meena Devi",
+            "doctor_name": "Dr. Pradeep Nair",
+            "consultation_fee": 700.0,
+            "medicine_cost": 150.0,
+            "room_charge": 800.0,
+            "total_amount": 1650.0,
+            "is_paid": true,
+            "bill_date": "2026-04-28"
+        }
+    ],
+    "id_counters": {
+        "next_patient_id": 1006,
+        "next_doctor_id": 2006,
+        "next_appointment_id": 3006,
+        "next_bill_id": 4005
     },
-    {
-      "id": 1002,
-      "name": "Priya Sharma",
-      "age": 28,
-      "phone": "9123456780",
-      "disease": "Hypertension",
-      "blood_group": "A+",
-      "admission_date": "2026-04-21"
-    },
-    {
-      "id": 1003,
-      "name": "Arun Raj",
-      "age": 52,
-      "phone": "9988776655",
-      "disease": "Cardiac Arrest",
-      "blood_group": "O+",
-      "admission_date": "2026-04-22"
-    },
-    {
-      "id": 1004,
-      "name": "Meena Devi",
-      "age": 44,
-      "phone": "9001122334",
-      "disease": "Fracture",
-      "blood_group": "AB-",
-      "admission_date": "2026-04-23"
-    },
-    {
-      "id": 1005,
-      "name": "Suresh Babu",
-      "age": 60,
-      "phone": "9876001122",
-      "disease": "Diabetes",
-      "blood_group": "B-",
-      "admission_date": "2026-04-25"
-    }
-  ],
-  "doctors": [
-    {
-      "id": 2001,
-      "name": "Dr. Anitha Rao",
-      "age": 45,
-      "phone": "9000111222",
-      "specialization": "Cardiologist",
-      "department": "Cardiology",
-      "consultation_fee": 800.00
-    },
-    {
-      "id": 2002,
-      "name": "Dr. Kiran Bose",
-      "age": 38,
-      "phone": "9111222333",
-      "specialization": "Diabetologist",
-      "department": "Endocrinology",
-      "consultation_fee": 600.00
-    },
-    {
-      "id": 2003,
-      "name": "Dr. Pradeep Nair",
-      "age": 50,
-      "phone": "9222333444",
-      "specialization": "Orthopedic",
-      "department": "Orthopaedics",
-      "consultation_fee": 700.00
-    },
-    {
-      "id": 2004,
-      "name": "Dr Reena Sharma ",
-      "age": 38,
-      "phone": "9976459067",
-      "specialization": "General Medicine",
-      "department": "Medicine",
-      "consultation_fee": 500.00
-    },
-    {
-      "id": 2005,
-      "name": "0",
-      "age": 0,
-      "phone": "0",
-      "specialization": "0",
-      "department": "0",
-      "consultation_fee": 0.00
-    }
-  ],
-  "appointments": [
-    {
-      "id": 3001,
-      "patient_id": 1001,
-      "doctor_id": 2002,
-      "patient_name": "Ravi Kumar",
-      "doctor_name": "Dr. Kiran Bose",
-      "date": "2026-04-24",
-      "time_slot": "10:00 AM",
-      "status": "Completed"
-    },
-    {
-      "id": 3002,
-      "patient_id": 1002,
-      "doctor_id": 2001,
-      "patient_name": "Priya Sharma",
-      "doctor_name": "Dr. Anitha Rao",
-      "date": "2026-04-25",
-      "time_slot": "11:00 AM",
-      "status": "Scheduled"
-    },
-    {
-      "id": 3003,
-      "patient_id": 1003,
-      "doctor_id": 2001,
-      "patient_name": "Arun Raj",
-      "doctor_name": "Dr. Anitha Rao",
-      "date": "2026-04-26",
-      "time_slot": "09:00 AM",
-      "status": "Scheduled"
-    },
-    {
-      "id": 3004,
-      "patient_id": 1004,
-      "doctor_id": 2003,
-      "patient_name": "Meena Devi",
-      "doctor_name": "Dr. Pradeep Nair",
-      "date": "2026-04-26",
-      "time_slot": "02:00 PM",
-      "status": "Cancelled"
-    },
-    {
-      "id": 3005,
-      "patient_id": 1005,
-      "doctor_id": 2002,
-      "patient_name": "Suresh Babu",
-      "doctor_name": "Dr. Kiran Bose",
-      "date": "2026-04-27",
-      "time_slot": "03:00 PM",
-      "status": "Scheduled"
-    }
-  ],
-  "bills": [
-    {
-      "id": 4001,
-      "patient_id": 1001,
-      "patient_name": "Ravi Kumar",
-      "doctor_name": "Dr. Kiran Bose",
-      "consultation_fee": 600.00,
-      "medicine_cost": 350.00,
-      "room_charge": 1200.00,
-      "total_amount": 2150.00,
-      "is_paid": true,
-      "bill_date": "2026-04-28"
-    },
-    {
-      "id": 4002,
-      "patient_id": 1002,
-      "patient_name": "Priya Sharma",
-      "doctor_name": "Dr. Anitha Rao",
-      "consultation_fee": 800.00,
-      "medicine_cost": 200.00,
-      "room_charge": 1500.00,
-      "total_amount": 2500.00,
-      "is_paid": false,
-      "bill_date": "2026-04-28"
-    },
-    {
-      "id": 4003,
-      "patient_id": 1003,
-      "patient_name": "Arun Raj",
-      "doctor_name": "Dr. Anitha Rao",
-      "consultation_fee": 800.00,
-      "medicine_cost": 500.00,
-      "room_charge": 2000.00,
-      "total_amount": 3300.00,
-      "is_paid": false,
-      "bill_date": "2026-04-28"
-    },
-    {
-      "id": 4004,
-      "patient_id": 1004,
-      "patient_name": "Meena Devi",
-      "doctor_name": "Dr. Pradeep Nair",
-      "consultation_fee": 700.00,
-      "medicine_cost": 150.00,
-      "room_charge": 800.00,
-      "total_amount": 1650.00,
-      "is_paid": true,
-      "bill_date": "2026-04-28"
-    }
-  ],
-  "id_counters": {
-    "next_patient_id": 1006,
-    "next_doctor_id": 2006,
-    "next_appointment_id": 3006,
-    "next_bill_id": 4005
-  }
+    "users": [
+        {
+            "id": 1,
+            "name": "Bhanu Prakash Challa",
+            "email": "bhanuprakashchalla007@gmail.com",
+            "phone": "9885604163",
+            "dob": "2007-01-18",
+            "gender": "Male",
+            "blood_group": "B+",
+            "password": "scrypt:32768:8:1$T61PhUWAgBB59iPz$bfc72bedd0166d0721691ffe4ae0ed1e839bf7202532cc1afae68dba5b9c7a4ee7dd2272ec503954feba89ec709b9d9263ac0f6e1620e645e2298b9f8fb37373",
+            "created_at": "2026-09-03T23:34:00.535730"
+        }
+    ]
 }

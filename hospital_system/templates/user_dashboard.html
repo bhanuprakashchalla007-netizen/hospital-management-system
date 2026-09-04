@@ -1,0 +1,2968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediCare | Patient Portal</title>
+
+    <style>
+        :root {
+            --primary: #1769ff;
+            --primary-dark: #0f55d9;
+            --primary-light: #edf4ff;
+
+            --dark: #172033;
+            --text: #344054;
+            --muted: #667085;
+
+            --background: #f6f8fc;
+            --white: #ffffff;
+            --border: #e7ebf2;
+
+            --success: #12b76a;
+            --warning: #f79009;
+            --danger: #f04438;
+
+            --radius: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: var(--background);
+            color: var(--text);
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 255px;
+            height: 100vh;
+
+            background: var(--white);
+
+            border-right: 1px solid var(--border);
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+
+            padding: 26px 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 0 10px;
+
+            margin-bottom: 42px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+
+            background: var(--primary);
+
+            color: white;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 700;
+
+            color: var(--dark);
+        }
+
+        .brand-subtitle {
+            font-size: 10px;
+
+            color: var(--muted);
+
+            margin-top: 2px;
+        }
+
+        .menu-label {
+            font-size: 10px;
+
+            font-weight: 700;
+
+            color: #98a2b3;
+
+            letter-spacing: 1px;
+
+            margin: 0 12px 10px;
+
+            text-transform: uppercase;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+
+            gap: 4px;
+        }
+
+        .nav-item {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 12px 13px;
+
+            border-radius: 10px;
+
+            color: #667085;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #f5f8ff;
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            border-top: 1px solid var(--border);
+
+            padding-top: 16px;
+        }
+
+        .logout {
+            color: var(--danger);
+        }
+
+        .logout:hover {
+            background: #fff4f3;
+            color: var(--danger);
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            margin-left: 255px;
+
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            height: 76px;
+
+            background: white;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 34px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 500;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .mobile-menu {
+            display: none;
+
+            width: 38px;
+            height: 38px;
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+
+            color: var(--dark);
+
+            font-weight: 700;
+        }
+
+        .header-title p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 3px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        .notification {
+            width: 38px;
+            height: 38px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            font-size: 16px;
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #eaf2ff;
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+        .user-mini-info strong {
+            display: block;
+
+            color: var(--dark);
+
+            font-size: 13px;
+        }
+
+        .user-mini-info span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 2px;
+        }
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+            padding: 30px 34px 50px;
+
+            max-width: 1500px;
+        }
+
+        .section {
+            display: none;
+
+            animation: fadeIn 0.25s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .welcome {
+            background:
+                linear-gradient(
+                    115deg,
+                    #1458d9,
+                    #2176ff
+                );
+
+            border-radius: 18px;
+
+            padding: 28px 30px;
+
+            color: white;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 24px;
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+        .welcome::after {
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            border-radius: 50%;
+
+            border: 40px solid rgba(255,255,255,0.07);
+
+            right: -80px;
+            top: -110px;
+        }
+
+        .welcome-text {
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .welcome-text small {
+            font-size: 12px;
+
+            opacity: 0.8;
+        }
+
+        .welcome-text h2 {
+            font-size: 25px;
+
+            margin-top: 7px;
+
+            margin-bottom: 8px;
+        }
+
+        .welcome-text p {
+            font-size: 13px;
+
+            opacity: 0.88;
+
+            max-width: 600px;
+
+            line-height: 1.6;
+        }
+
+        .welcome-action {
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .primary-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            background: white;
+
+            color: var(--primary);
+
+            border: none;
+
+            padding: 11px 17px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-1px);
+
+            box-shadow: 0 7px 20px rgba(0,0,0,0.12);
+        }
+
+        /* =====================================================
+           STAT CARDS
+        ===================================================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 17px;
+
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: #cbdcff;
+
+            box-shadow:
+                0 8px 25px rgba(16,24,40,0.05);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 11px;
+
+            background: var(--primary-light);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+        .stat-info small {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-bottom: 4px;
+        }
+
+        .stat-info strong {
+            display: block;
+
+            color: var(--dark);
+
+            font-size: 23px;
+        }
+
+        /* =====================================================
+           GRID
+        ===================================================== */
+
+        .dashboard-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(300px, 0.8fr);
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            padding: 22px;
+        }
+
+        .card-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .card-header h3 {
+            color: var(--dark);
+
+            font-size: 16px;
+        }
+
+        .card-header p {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 4px;
+        }
+
+        .view-link {
+            color: var(--primary);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           NEXT APPOINTMENT
+        ===================================================== */
+
+        .next-appointment {
+            border: 1px solid #dce7ff;
+
+            background: #f8fbff;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+        .doctor-info {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+        }
+
+        .doctor-avatar {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            background: #e7f0ff;
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .doctor-info h4 {
+            color: var(--dark);
+
+            font-size: 14px;
+        }
+
+        .doctor-info p {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 4px;
+        }
+
+        .appointment-time {
+            text-align: right;
+        }
+
+        .appointment-time strong {
+            display: block;
+
+            color: var(--dark);
+
+            font-size: 14px;
+        }
+
+        .appointment-time span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 4px;
+        }
+
+        .badge {
+            display: inline-flex;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            margin-top: 6px;
+        }
+
+        .badge-success {
+            background: #ecfdf3;
+
+            color: #027a48;
+        }
+
+        .badge-warning {
+            background: #fffaeb;
+
+            color: #b54708;
+        }
+
+        .badge-danger {
+            background: #fef3f2;
+
+            color: #b42318;
+        }
+
+        /* =====================================================
+           QUICK ACTIONS
+        ===================================================== */
+
+        .quick-actions {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .quick-action {
+            padding: 15px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            text-decoration: none;
+
+            color: var(--text);
+
+            transition: 0.2s;
+        }
+
+        .quick-action:hover {
+            border-color: #cbdcff;
+
+            background: #f8fbff;
+        }
+
+        .quick-action-icon {
+            width: 35px;
+            height: 35px;
+
+            border-radius: 9px;
+
+            background: var(--primary-light);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 9px;
+        }
+
+        .quick-action strong {
+            display: block;
+
+            font-size: 12px;
+
+            color: var(--dark);
+        }
+
+        .quick-action span {
+            display: block;
+
+            font-size: 10px;
+
+            color: var(--muted);
+
+            margin-top: 4px;
+
+            line-height: 1.4;
+        }
+
+        /* =====================================================
+           APPOINTMENT LIST
+        ===================================================== */
+
+        .appointment-row {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 14px 0;
+
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .appointment-row:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .appointment-small-icon {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 9px;
+
+            background: #f4f7fb;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--primary);
+
+            font-size: 17px;
+        }
+
+        .appointment-details h4 {
+            color: var(--dark);
+
+            font-size: 12px;
+        }
+
+        .appointment-details p {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 4px;
+        }
+
+        .appointment-date {
+            text-align: right;
+        }
+
+        .appointment-date strong {
+            display: block;
+
+            font-size: 11px;
+
+            color: var(--dark);
+        }
+
+        .appointment-date span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+        }
+
+        /* =====================================================
+           DOCTORS
+        ===================================================== */
+
+        .doctor-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 16px;
+        }
+
+        .doctor-card {
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            padding: 20px;
+
+            background: white;
+
+            transition: 0.2s;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(16,24,40,0.06);
+
+            border-color: #cbdcff;
+        }
+
+        .doctor-card-top {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 16px;
+        }
+
+        .doctor-card-avatar {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            background: #edf4ff;
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .doctor-card h3 {
+            color: var(--dark);
+
+            font-size: 13px;
+        }
+
+        .doctor-card .specialization {
+            color: var(--primary);
+
+            font-size: 10px;
+
+            margin-top: 4px;
+        }
+
+        .doctor-card-info {
+            border-top: 1px solid #f0f2f5;
+
+            padding-top: 12px;
+
+            display: flex;
+
+            justify-content: space-between;
+        }
+
+        .doctor-card-info span {
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .doctor-card-info strong {
+            display: block;
+
+            color: var(--dark);
+
+            font-size: 11px;
+
+            margin-top: 3px;
+        }
+
+        .book-button {
+            width: 100%;
+
+            margin-top: 14px;
+
+            padding: 10px;
+
+            background: var(--primary);
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            display: block;
+
+            text-align: center;
+        }
+
+        .book-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* =====================================================
+           AI ASSISTANT
+        ===================================================== */
+
+        .ai-banner {
+            background:
+                linear-gradient(
+                    115deg,
+                    #102a56,
+                    #1b4f9c
+                );
+
+            border-radius: 17px;
+
+            padding: 32px;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .ai-banner::before {
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            border-radius: 50%;
+
+            border: 50px solid rgba(255,255,255,0.05);
+
+            right: -100px;
+            bottom: -180px;
+        }
+
+        .ai-content {
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .ai-label {
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            opacity: 0.7;
+
+            text-transform: uppercase;
+        }
+
+        .ai-banner h2 {
+            font-size: 23px;
+
+            margin: 8px 0;
+        }
+
+        .ai-banner p {
+            max-width: 600px;
+
+            color: rgba(255,255,255,0.75);
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+        .ai-button {
+            position: relative;
+
+            z-index: 2;
+
+            background: white;
+
+            color: #173f79;
+
+            border: none;
+
+            border-radius: 9px;
+
+            padding: 12px 18px;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        /* =====================================================
+           PROFILE
+        ===================================================== */
+
+        .profile-header {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            margin-bottom: 20px;
+        }
+
+        .profile-big-avatar {
+            width: 68px;
+            height: 68px;
+
+            border-radius: 50%;
+
+            background: #eaf2ff;
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+
+            font-weight: 700;
+        }
+
+        .profile-header h2 {
+            color: var(--dark);
+
+            font-size: 19px;
+        }
+
+        .profile-header p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 5px;
+        }
+
+        .profile-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+        }
+
+        .profile-field {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            padding: 17px;
+        }
+
+        .profile-field label {
+            display: block;
+
+            color: #98a2b3;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.7px;
+
+            margin-bottom: 7px;
+        }
+
+        .profile-field strong {
+            color: var(--dark);
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           EMPTY STATE
+        ===================================================== */
+
+        .empty-state {
+            padding: 40px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+        .empty-state-icon {
+            width: 48px;
+            height: 48px;
+
+            background: #f3f6fa;
+
+            border-radius: 12px;
+
+            margin: 0 auto 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+        .empty-state h3 {
+            color: var(--dark);
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+        .empty-state p {
+            font-size: 11px;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+
+                transition: 0.25s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: flex;
+
+                align-items: center;
+                justify-content: center;
+            }
+
+            .header {
+                padding: 0 18px;
+            }
+
+            .content {
+                padding: 22px 18px 40px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                padding: 24px;
+            }
+
+            .welcome-action {
+                display: none;
+            }
+
+            .ai-banner {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .header-title p {
+                display: none;
+            }
+
+            .notification {
+                display: none;
+            }
+
+            .user-mini-info {
+                display: none;
+            }
+
+            .welcome-text h2 {
+                font-size: 21px;
+            }
+
+            .next-appointment {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .appointment-time {
+                text-align: left;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+
+        /* ================= FIND DOCTOR / BOOKING ================= */
+        .doctor-tools{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 24px;padding:20px;background:#f8fafc;border:1px solid #e8edf4;border-radius:14px}
+        .doctor-tools input,.doctor-tools select{flex:1;min-width:220px;padding:12px 14px;border:1px solid #dbe2ec;border-radius:10px;background:#fff;outline:none;font:inherit;color:#263247}
+        .doctor-tools input:focus,.doctor-tools select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+        .find-doctor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+        .find-doctor-card{border:1px solid #e4e9f1;border-radius:16px;padding:20px;background:#fff;transition:.2s;display:flex;flex-direction:column;gap:14px}
+        .find-doctor-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(24,39,75,.08);border-color:#cbdaf5}
+        .find-doctor-top{display:flex;gap:13px;align-items:center}
+        .find-doctor-avatar{width:52px;height:52px;border-radius:14px;background:#edf4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:700}
+        .find-doctor-card h4{font-size:17px;margin:0 0 4px}
+        .find-doctor-specialty{font-size:13px;color:#667085}
+        .doctor-meta{font-size:13px;color:#6b7689;line-height:1.7}
+        .doctor-book-btn{border:0;background:#2563eb;color:#fff;padding:11px 14px;border-radius:10px;font-weight:700;cursor:pointer;width:100%}
+        .doctor-book-btn:hover{background:#1d4ed8}
+        .doctor-empty{padding:35px;text-align:center;color:#7a8496;border:1px dashed #d8dee8;border-radius:14px}
+        .previous-title{margin:30px 0 15px;font-size:18px;font-weight:750}
+        .booking-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9999;align-items:center;justify-content:center;padding:20px}
+        .booking-modal{width:min(520px,100%);background:#fff;border-radius:20px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+        .booking-modal-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:20px}
+        .booking-modal-head h3{margin:0 0 5px;font-size:22px}
+        .booking-modal-head p{margin:0;color:#707b8f;font-size:13px}
+        .modal-close{border:0;background:#f1f4f8;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:20px}
+        .booking-form-group{margin-bottom:16px}
+        .booking-form-group label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:#344054}
+        .booking-form-group input,.booking-form-group select,.booking-form-group textarea{width:100%;padding:12px 13px;border:1px solid #dbe2ec;border-radius:10px;outline:none;font:inherit}
+        .booking-form-group textarea{min-height:90px;resize:vertical}
+        .booking-form-group input:focus,.booking-form-group select:focus,.booking-form-group textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+        .booking-actions{display:flex;gap:10px;margin-top:20px}
+        .booking-actions button{flex:1;padding:12px;border-radius:10px;font-weight:700;cursor:pointer}
+        .booking-cancel{border:1px solid #dbe2ec;background:#fff;color:#344054}
+        .booking-confirm{border:0;background:#2563eb;color:#fff}
+        .slot-status{font-size:12px;color:#7a8496;margin-top:7px}
+        @media(max-width:700px){.doctor-tools{padding:14px}.booking-modal{padding:20px}}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            M
+        </div>
+
+        <div>
+            <div class="brand-name">
+                MediCare
+            </div>
+
+            <div class="brand-subtitle">
+                HEALTHCARE PLATFORM
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="menu-label">
+        Patient Portal
+    </div>
+
+
+    <nav class="nav">
+
+        <a
+            class="nav-item active"
+            onclick="showSection('home', this)"
+        >
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+
+        <a
+            class="nav-item"
+            onclick="showSection('appointments', this)"
+        >
+            <span class="nav-icon">▣</span>
+            My Appointments
+        </a>
+
+
+        <a
+            class="nav-item"
+            onclick="showSection('doctors', this)"
+        >
+            <span class="nav-icon">♙</span>
+            My Doctors
+        </a>
+
+
+        <a
+            class="nav-item"
+            onclick="showSection('profile', this)"
+        >
+            <span class="nav-icon">○</span>
+            My Profile
+        </a>
+
+    </nav>
+
+
+    <div class="menu-label" style="margin-top:28px;">
+        Healthcare
+    </div>
+
+
+    <nav class="nav">
+
+        <a
+            class="nav-item"
+            onclick="showSection('ai', this)"
+        >
+            <span class="nav-icon">✦</span>
+            AI Health Assistant
+        </a>
+
+
+        <a
+            href="/ai"
+            class="nav-item"
+        >
+            <span class="nav-icon">+</span>
+            Book Appointment
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <a
+            href="/user/logout"
+            class="nav-item logout"
+        >
+            <span class="nav-icon">↪</span>
+            Sign Out
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="header-left">
+
+            <button
+                class="mobile-menu"
+                onclick="toggleSidebar()"
+            >
+                ☰
+            </button>
+
+
+            <div class="header-title">
+
+                <h1 id="pageHeading">
+                    Dashboard
+                </h1>
+
+                <p>
+                    Your personal healthcare overview
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <button class="notification">
+                ♧
+            </button>
+
+
+            <div class="user-mini">
+
+                <div class="avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div class="user-mini-info">
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <span>
+                        Patient
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CONTENT
+    ===================================================== -->
+
+    <div class="content">
+
+
+        <!-- =================================================
+             HOME
+        ================================================= -->
+
+        <section
+            id="home"
+            class="section active"
+        >
+
+
+            <!-- WELCOME -->
+
+            <div class="welcome">
+
+                <div class="welcome-text">
+
+                    <small>
+                        PATIENT PORTAL
+                    </small>
+
+                    <h2>
+                        Welcome back, {{ user.name }}
+                    </h2>
+
+                    <p>
+                        Stay on top of your health, manage your
+                        appointments and connect with your healthcare team.
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-action">
+
+                    <a
+                        href="/ai"
+                        class="primary-button"
+                    >
+                        + Book Appointment
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ▣
+                    </div>
+
+                    <div class="stat-info">
+
+                        <small>
+                            UPCOMING
+                        </small>
+
+                        <strong>
+                            {{ upcoming_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ◷
+                    </div>
+
+                    <div class="stat-info">
+
+                        <small>
+                            TOTAL VISITS
+                        </small>
+
+                        <strong>
+                            {{ total_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ♙
+                    </div>
+
+                    <div class="stat-info">
+
+                        <small>
+                            DOCTORS CONSULTED
+                        </small>
+
+                        <strong>
+                            {{ consulted_doctors|length }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAIN DASHBOARD GRID -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- NEXT APPOINTMENT -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Next Appointment
+                            </h3>
+
+                            <p>
+                                Your upcoming consultation
+                            </p>
+
+                        </div>
+
+                        <a
+                            class="view-link"
+                            onclick="showSection('appointments', null)"
+                        >
+                            View all
+                        </a>
+
+                    </div>
+
+
+                    {% set upcoming = namespace(found=false) %}
+
+                    {% for appointment in appointments %}
+
+                        {% if appointment.status|lower == 'scheduled' and not upcoming.found %}
+
+                            {% set upcoming.found = true %}
+
+                            <div class="next-appointment">
+
+                                <div class="doctor-info">
+
+                                    <div class="doctor-avatar">
+                                        ♙
+                                    </div>
+
+                                    <div>
+
+                                        <h4>
+                                            Dr. {{ appointment.doctor_name }}
+                                        </h4>
+
+                                        <p>
+                                            Medical Consultation
+                                        </p>
+
+                                        <span class="badge badge-success">
+                                            Scheduled
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="appointment-time">
+
+                                    <strong>
+                                        {{ appointment.date }}
+                                    </strong>
+
+                                    <span>
+                                        {{ appointment.time_slot }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+
+                    {% if not upcoming.found %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-state-icon">
+                                ▣
+                            </div>
+
+                            <h3>
+                                No upcoming appointments
+                            </h3>
+
+                            <p>
+                                You currently have no scheduled consultations.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Quick Actions
+                            </h3>
+
+                            <p>
+                                Frequently used services
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+                        <a
+                            href="/ai"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-action-icon">
+                                +
+                            </div>
+
+                            <strong>
+                                Book Doctor
+                            </strong>
+
+                            <span>
+                                Find and book a consultation
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="/ai"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-action-icon">
+                                ✦
+                            </div>
+
+                            <strong>
+                                AI Health Guide
+                            </strong>
+
+                            <span>
+                                Get guidance for common symptoms
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="quick-action"
+                            onclick="showSection('appointments', null)"
+                        >
+
+                            <div class="quick-action-icon">
+                                ▣
+                            </div>
+
+                            <strong>
+                                Appointments
+                            </strong>
+
+                            <span>
+                                View your medical visits
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="quick-action"
+                            onclick="showSection('profile', null)"
+                        >
+
+                            <div class="quick-action-icon">
+                                ○
+                            </div>
+
+                            <strong>
+                                My Profile
+                            </strong>
+
+                            <span>
+                                View your health information
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT APPOINTMENTS -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Recent Appointments
+                        </h3>
+
+                        <p>
+                            Your latest consultations
+                        </p>
+
+                    </div>
+
+                    <a
+                        class="view-link"
+                        onclick="showSection('appointments', null)"
+                    >
+                        View history
+                    </a>
+
+                </div>
+
+
+                {% if appointments %}
+
+                    {% for appointment in appointments[:5] %}
+
+                    <div class="appointment-row">
+
+                        <div class="appointment-left">
+
+                            <div class="appointment-small-icon">
+                                ♙
+                            </div>
+
+                            <div class="appointment-details">
+
+                                <h4>
+                                    Dr. {{ appointment.doctor_name }}
+                                </h4>
+
+                                <p>
+                                    Medical Consultation
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="appointment-date">
+
+                            <strong>
+                                {{ appointment.date }}
+                            </strong>
+
+                            <span>
+                                {{ appointment.time_slot }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+                            ▣
+                        </div>
+
+                        <h3>
+                            No appointment history
+                        </h3>
+
+                        <p>
+                            Your consultations will appear here.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- AI BANNER -->
+
+            <div class="ai-banner">
+
+                <div class="ai-content">
+
+                    <div class="ai-label">
+                        Intelligent Healthcare
+                    </div>
+
+                    <h2>
+                        Your AI Health Assistant
+                    </h2>
+
+                    <p>
+                        Describe common symptoms and get general health
+                        guidance, possible causes, warning signs and help
+                        finding the right medical specialist.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="/ai"
+                    class="ai-button"
+                >
+                    Talk to AI Assistant →
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             APPOINTMENTS
+        ================================================= -->
+
+        <section
+            id="appointments"
+            class="section"
+        >
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            My Appointments
+                        </h3>
+
+                        <p>
+                            Complete history of your healthcare visits
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="/ai"
+                        class="view-link"
+                    >
+                        + New Appointment
+                    </a>
+
+                </div>
+
+
+                {% if appointments %}
+
+                    {% for appointment in appointments %}
+
+                    <div class="appointment-row">
+
+                        <div class="appointment-left">
+
+                            <div class="appointment-small-icon">
+                                ♙
+                            </div>
+
+                            <div class="appointment-details">
+
+                                <h4>
+                                    Dr. {{ appointment.doctor_name }}
+                                </h4>
+
+                                <p>
+                                    Appointment ID:
+                                    {{ appointment.id if appointment.id else 'N/A' }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="appointment-date">
+
+                            <strong>
+                                {{ appointment.date }}
+                            </strong>
+
+                            <span>
+                                {{ appointment.time_slot }}
+                            </span>
+
+
+                            {% set status = appointment.status|lower %}
+
+
+                            {% if status == 'scheduled' %}
+
+                                <span class="badge badge-success">
+                                    Scheduled
+                                </span>
+
+                            {% elif status == 'completed' %}
+
+                                <span class="badge badge-success">
+                                    Completed
+                                </span>
+
+                            {% elif status == 'cancelled' %}
+
+                                <span class="badge badge-danger">
+                                    Cancelled
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge badge-warning">
+                                    {{ appointment.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+                            ▣
+                        </div>
+
+                        <h3>
+                            No appointments yet
+                        </h3>
+
+                        <p>
+                            Book your first consultation to see it here.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             DOCTORS
+        ================================================= -->
+
+        <section
+            id="doctors"
+            class="section"
+        >
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div>
+                        <h3>Find a Doctor</h3>
+                        <p>Search doctors and book a consultation</p>
+                    </div>
+                </div>
+
+                <div style="padding:24px 24px 0;">
+                    <div class="doctor-tools">
+                        <input id="doctorSearch" type="search"
+                               placeholder="Search doctor or specialization..."
+                               oninput="filterDoctors()">
+                        <select id="specializationFilter" onchange="filterDoctors()">
+                            <option value="">All Specializations</option>
+                        </select>
+                    </div>
+
+                    <div id="doctorSearchMessage" style="display:none;margin-bottom:18px;color:#667085;font-size:14px;"></div>
+                    <div id="findDoctorGrid" class="find-doctor-grid">
+                        <div class="doctor-empty">Loading doctors...</div>
+                    </div>
+
+                    <div class="previous-title">Previously Consulted Doctors</div>
+                </div>
+
+                {% if consulted_doctors %}
+                    <div class="doctor-grid" style="padding:0 24px 24px;">
+                        {% for doctor in consulted_doctors %}
+                        <div class="doctor-card">
+                            <div class="doctor-card-top">
+                                <div class="doctor-card-avatar">♙</div>
+                                <div>
+                                    <h3>Dr. {{ doctor.name }}</h3>
+                                    <div class="specialization">{{ doctor.specialization }}</div>
+                                </div>
+                            </div>
+                            <div class="doctor-card-info">
+                                <div>
+                                    <span>Department</span>
+                                    <strong>{{ doctor.department }}</strong>
+                                </div>
+                                <div>
+                                    <span>Visits</span>
+                                    <strong>{{ doctor.consultation_count }}</strong>
+                                </div>
+                            </div>
+                            <button class="book-button"
+                                    onclick='openBooking({{ doctor|tojson|safe }})'>
+                                Book Consultation
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="padding:0 24px 24px;">
+                        <div class="doctor-empty">
+                            You haven't consulted a doctor yet. Choose a doctor above to book your first appointment.
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             PROFILE
+        ================================================= -->
+
+        <section
+            id="profile"
+            class="section"
+        >
+
+            <div class="profile-header">
+
+                <div class="profile-big-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <h2>
+                        {{ user.name }}
+                    </h2>
+
+                    <p>
+                        Registered MediCare Patient
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Personal Information
+                        </h3>
+
+                        <p>
+                            Your registered account information
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-grid">
+
+                    <div class="profile-field">
+
+                        <label>
+                            FULL NAME
+                        </label>
+
+                        <strong>
+                            {{ user.name }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <label>
+                            EMAIL ADDRESS
+                        </label>
+
+                        <strong>
+                            {{ user.email }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <label>
+                            PHONE NUMBER
+                        </label>
+
+                        <strong>
+                            {{ user.phone }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <label>
+                            DATE OF BIRTH
+                        </label>
+
+                        <strong>
+                            {{ user.dob }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <label>
+                            GENDER
+                        </label>
+
+                        <strong>
+                            {{ user.gender }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <label>
+                            BLOOD GROUP
+                        </label>
+
+                        <strong>
+                            {{ user.blood_group }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             AI ASSISTANT
+        ================================================= -->
+
+        <section
+            id="ai"
+            class="section"
+        >
+
+            <div class="ai-banner">
+
+                <div class="ai-content">
+
+                    <div class="ai-label">
+                        MEDICARE AI
+                    </div>
+
+                    <h2>
+                        AI Health Assistant
+                    </h2>
+
+                    <p>
+                        Get general guidance for common health concerns,
+                        understand symptoms and find the appropriate
+                        medical specialist when professional care is needed.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="/ai"
+                    class="ai-button"
+                >
+                    Open AI Assistant →
+                </a>
+
+            </div>
+
+
+            <div
+                class="card"
+                style="margin-top:20px;"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            What can the AI Assistant help with?
+                        </h3>
+
+                        <p>
+                            Your first step for general health guidance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <div class="quick-action">
+
+                        <div class="quick-action-icon">
+                            ?
+                        </div>
+
+                        <strong>
+                            Understand Symptoms
+                        </strong>
+
+                        <span>
+                            Describe common symptoms and receive
+                            general health information.
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-action">
+
+                        <div class="quick-action-icon">
+                            +
+                        </div>
+
+                        <strong>
+                            Find a Specialist
+                        </strong>
+
+                        <span>
+                            Get guidance about which type of doctor
+                            may be appropriate.
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-action">
+
+                        <div class="quick-action-icon">
+                            !
+                        </div>
+
+                        <strong>
+                            Warning Signs
+                        </strong>
+
+                        <span>
+                            Learn when symptoms may require
+                            professional medical attention.
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-action">
+
+                        <div class="quick-action-icon">
+                            ▣
+                        </div>
+
+                        <strong>
+                            Book Consultation
+                        </strong>
+
+                        <span>
+                            Continue from AI guidance to doctor
+                            appointment booking.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+<!-- ================= BOOKING MODAL ================= -->
+<div class="booking-overlay" id="bookingOverlay">
+    <div class="booking-modal">
+        <div class="booking-modal-head">
+            <div>
+                <h3>Book Appointment</h3>
+                <p id="bookingDoctorText">Select your preferred date and time.</p>
+            </div>
+            <button class="modal-close" onclick="closeBooking()">×</button>
+        </div>
+
+        <input type="hidden" id="bookingDoctorId">
+
+        <div class="booking-form-group">
+            <label for="bookingDate">Appointment Date</label>
+            <input type="date" id="bookingDate" onchange="loadAppointmentSlots()">
+        </div>
+
+        <div class="booking-form-group">
+            <label for="bookingTime">Available Time</label>
+            <select id="bookingTime">
+                <option value="">Select a date first</option>
+            </select>
+            <div class="slot-status" id="slotStatus"></div>
+        </div>
+
+        <div class="booking-form-group">
+            <label for="bookingReason">Reason for Visit</label>
+            <textarea id="bookingReason" maxlength="500"
+                      placeholder="Briefly describe why you want to consult this doctor..."></textarea>
+        </div>
+
+        <div class="booking-actions">
+            <button class="booking-cancel" onclick="closeBooking()">Cancel</button>
+            <button class="booking-confirm" id="confirmBookingBtn" onclick="confirmAppointment()">Confirm Booking</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    /* =====================================================
+       SECTION NAVIGATION
+    ===================================================== */
+
+    function showSection(sectionId, clickedItem) {
+
+        const sections =
+            document.querySelectorAll(".section");
+
+        sections.forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+
+        const selected =
+            document.getElementById(sectionId);
+
+        if (selected) {
+
+            selected.classList.add("active");
+
+        }
+
+
+        const navItems =
+            document.querySelectorAll(".nav-item");
+
+        navItems.forEach(item => {
+
+            item.classList.remove("active");
+
+        });
+
+
+        if (clickedItem) {
+
+            clickedItem.classList.add("active");
+
+        }
+
+
+        const headings = {
+
+            home: "Dashboard",
+
+            appointments: "My Appointments",
+
+            doctors: "My Doctors",
+
+            profile: "My Profile",
+
+            ai: "AI Health Assistant"
+
+        };
+
+
+        document.getElementById("pageHeading").textContent =
+            headings[sectionId] || "Dashboard";
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+
+        document
+            .getElementById("sidebar")
+            .classList.remove("open");
+
+    }
+
+
+    /* =====================================================
+       MOBILE SIDEBAR
+    ===================================================== */
+
+    function toggleSidebar() {
+
+        document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+
+    }
+
+
+    /* =====================================================
+       CLOSE MOBILE SIDEBAR
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const sidebar =
+                document.getElementById("sidebar");
+
+            const menu =
+                document.querySelector(".mobile-menu");
+
+
+            if (
+                window.innerWidth <= 800 &&
+                sidebar.classList.contains("open") &&
+                !sidebar.contains(event.target) &&
+                !menu.contains(event.target)
+            ) {
+
+                sidebar.classList.remove("open");
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       USER APPOINTMENT SYSTEM
+    ===================================================== */
+
+    let allDoctors = [];
+
+    async function loadDoctorsForBooking() {
+        const grid = document.getElementById("findDoctorGrid");
+        const filter = document.getElementById("specializationFilter");
+
+        if (!grid) return;
+
+        try {
+            const response = await fetch("/api/data");
+            const data = await response.json();
+
+            allDoctors = Array.isArray(data.doctors) ? data.doctors : [];
+
+            const specialties = [...new Set(
+                allDoctors.map(d => d.specialization).filter(Boolean)
+            )].sort();
+
+            filter.innerHTML = '<option value="">All Specializations</option>';
+            specialties.forEach(specialty => {
+                const option = document.createElement("option");
+                option.value = specialty;
+                option.textContent = specialty;
+                filter.appendChild(option);
+            });
+
+            renderDoctors(allDoctors);
+
+        } catch (error) {
+            console.error("Doctor loading error:", error);
+            grid.innerHTML = '<div class="doctor-empty">Unable to load doctors. Please refresh the page.</div>';
+        }
+    }
+
+    function renderDoctors(doctors) {
+        const grid = document.getElementById("findDoctorGrid");
+        const message = document.getElementById("doctorSearchMessage");
+
+        if (!doctors.length) {
+            grid.innerHTML = '<div class="doctor-empty">No doctors match your search.</div>';
+            message.style.display = "none";
+            return;
+        }
+
+        message.textContent = doctors.length + " doctor" + (doctors.length === 1 ? "" : "s") + " available";
+        message.style.display = "block";
+        grid.innerHTML = "";
+
+        doctors.forEach(doctor => {
+            const card = document.createElement("div");
+            card.className = "find-doctor-card";
+
+            const name = escapeText(doctor.name || "Doctor");
+            const specialty = escapeText(doctor.specialization || "General Physician");
+            const department = escapeText(doctor.department || "Medical Department");
+            const experience = doctor.experience ? escapeText(String(doctor.experience)) : "Hospital specialist";
+
+            card.innerHTML = `
+                <div class="find-doctor-top">
+                    <div class="find-doctor-avatar">♙</div>
+                    <div>
+                        <h4>Dr. ${name}</h4>
+                        <div class="find-doctor-specialty">${specialty}</div>
+                    </div>
+                </div>
+                <div class="doctor-meta">
+                    <strong>Department:</strong> ${department}<br>
+                    <strong>Experience:</strong> ${experience}
+                </div>
+                <button class="doctor-book-btn">Book Appointment</button>
+            `;
+
+            card.querySelector(".doctor-book-btn").addEventListener("click", () => {
+                openBooking(doctor);
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
+    function filterDoctors() {
+        const query = (document.getElementById("doctorSearch").value || "").toLowerCase().trim();
+        const specialty = document.getElementById("specializationFilter").value;
+
+        const filtered = allDoctors.filter(doctor => {
+            const name = String(doctor.name || "").toLowerCase();
+            const spec = String(doctor.specialization || "").toLowerCase();
+            const dept = String(doctor.department || "").toLowerCase();
+
+            return (!query || name.includes(query) || spec.includes(query) || dept.includes(query))
+                && (!specialty || doctor.specialization === specialty);
+        });
+
+        renderDoctors(filtered);
+    }
+
+    function escapeText(value) {
+        const div = document.createElement("div");
+        div.textContent = value;
+        return div.innerHTML;
+    }
+
+    function openBooking(doctor) {
+        if (!doctor) return;
+
+        document.getElementById("bookingDoctorId").value = doctor.id || "";
+        document.getElementById("bookingDoctorText").textContent =
+            "Dr. " + (doctor.name || "Doctor") + " • " +
+            (doctor.specialization || "General Physician");
+
+        const date = document.getElementById("bookingDate");
+        const today = new Date().toISOString().split("T")[0];
+        date.min = today;
+        date.value = today;
+
+        document.getElementById("bookingReason").value = "";
+        document.getElementById("bookingTime").innerHTML = '<option value="">Loading available times...</option>';
+        document.getElementById("slotStatus").textContent = "Checking availability...";
+        document.getElementById("bookingOverlay").style.display = "flex";
+
+        loadAppointmentSlots();
+    }
+
+    function closeBooking() {
+        document.getElementById("bookingOverlay").style.display = "none";
+    }
+
+    async function loadAppointmentSlots() {
+        const doctorId = document.getElementById("bookingDoctorId").value;
+        const date = document.getElementById("bookingDate").value;
+        const select = document.getElementById("bookingTime");
+        const status = document.getElementById("slotStatus");
+
+        if (!doctorId || !date) return;
+
+        select.innerHTML = '<option value="">Checking availability...</option>';
+        status.textContent = "";
+
+        try {
+            const response = await fetch("/api/check-availability", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ doctor_id: doctorId, date: date })
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                select.innerHTML = '<option value="">Unable to load slots</option>';
+                status.textContent = data.message || "Unable to check availability.";
+                return;
+            }
+
+            const slots = data.available_slots || data.slots || [];
+
+            select.innerHTML = '<option value="">Select available time</option>';
+
+            slots.forEach(slot => {
+                const option = document.createElement("option");
+                option.value = slot;
+                option.textContent = slot;
+                select.appendChild(option);
+            });
+
+            status.textContent = slots.length
+                ? slots.length + " time slot(s) available"
+                : "No slots available for this date.";
+
+        } catch (error) {
+            console.error("Availability error:", error);
+            select.innerHTML = '<option value="">Unable to load slots</option>';
+            status.textContent = "Please try again.";
+        }
+    }
+
+    async function confirmAppointment() {
+        const doctorId = document.getElementById("bookingDoctorId").value;
+        const date = document.getElementById("bookingDate").value;
+        const timeSlot = document.getElementById("bookingTime").value;
+        const reason = document.getElementById("bookingReason").value.trim();
+        const button = document.getElementById("confirmBookingBtn");
+
+        if (!doctorId || !date || !timeSlot) {
+            alert("Please select a date and available time.");
+            return;
+        }
+
+        if (!reason) {
+            alert("Please enter the reason for your visit.");
+            return;
+        }
+
+        const doctor = allDoctors.find(d => String(d.id) === String(doctorId));
+        const patientName = {{ user.name|tojson }};
+
+        button.disabled = true;
+        button.textContent = "Booking...";
+
+        try {
+            const response = await fetch("/api/book-appointment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    patient_name: patientName,
+                    doctor_id: doctorId,
+                    date: date,
+                    time_slot: timeSlot,
+                    reason: reason
+                })
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert(data.message || "Unable to book appointment.");
+                return;
+            }
+
+            alert(
+                "Appointment booked successfully!\n\n" +
+                "Doctor: Dr. " + (doctor ? doctor.name : "Doctor") + "\n" +
+                "Date: " + date + "\n" +
+                "Time: " + timeSlot
+            );
+
+            closeBooking();
+            window.location.reload();
+
+        } catch (error) {
+            console.error("Booking error:", error);
+            alert("Unable to connect to the server. Please try again.");
+        } finally {
+            button.disabled = false;
+            button.textContent = "Confirm Booking";
+        }
+    }
+
+    document.getElementById("bookingOverlay").addEventListener("click", function(event) {
+        if (event.target === this) closeBooking();
+    });
+
+    /* Load doctors when dashboard is ready. */
+    document.addEventListener("DOMContentLoaded", loadDoctorsForBooking);
+
+</script>
+
+</body>
+</html>

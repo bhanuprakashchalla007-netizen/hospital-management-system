@@ -1,0 +1,1687 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Health Assistant | Hospital Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f5f8fc;
+            color: #172033;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e6eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #e8f1ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        /* ================= LAYOUT ================= */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        .sidebar {
+            width: 240px;
+            background: white;
+            border-right: 1px solid #e6eaf0;
+            padding: 25px 16px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            color: #8a94a6;
+            text-transform: uppercase;
+            margin: 8px 12px 12px;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            margin-bottom: 6px;
+            border-radius: 10px;
+            color: #566176;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f0f5ff;
+            color: #2563eb;
+        }
+
+        .nav-item.active {
+            background: #eaf2ff;
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            flex: 1;
+            padding: 32px;
+            max-width: 1400px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 750;
+            margin-bottom: 7px;
+        }
+
+        .page-subtitle {
+            color: #707b8f;
+            margin-bottom: 28px;
+        }
+
+        /* ================= AI HERO ================= */
+
+        .ai-hero {
+            background: linear-gradient(135deg, #1769e0, #4f8df7);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.16);
+        }
+
+        .hero-content h2 {
+            font-size: 25px;
+            margin-bottom: 9px;
+        }
+
+        .hero-content p {
+            max-width: 680px;
+            line-height: 1.6;
+            opacity: 0.92;
+        }
+
+        .ai-icon {
+            font-size: 65px;
+            padding-right: 25px;
+        }
+
+        /* ================= GRID ================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.6fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e7ebf2;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(20, 35, 60, 0.04);
+        }
+
+        .card-header {
+            padding: 22px 24px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .card-header h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            color: #7a8496;
+            font-size: 14px;
+        }
+
+        /* ================= CHAT ================= */
+
+        .chat-card {
+            overflow: hidden;
+        }
+
+        .chat-box {
+            height: 470px;
+            overflow-y: auto;
+            padding: 24px;
+            background: #fbfcfe;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 18px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 78%;
+            padding: 14px 17px;
+            border-radius: 15px;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .message.ai .message-content {
+            background: white;
+            border: 1px solid #e5e9f0;
+            border-top-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: #2563eb;
+            color: white;
+            border-top-right-radius: 5px;
+        }
+
+        .message-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #8a94a6;
+            margin-bottom: 5px;
+        }
+
+        .input-area {
+            border-top: 1px solid #e7ebf2;
+            padding: 18px;
+            background: white;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        textarea {
+            flex: 1;
+            resize: none;
+            border: 1px solid #dce2eb;
+            border-radius: 12px;
+            padding: 13px 15px;
+            min-height: 52px;
+            max-height: 130px;
+            font-family: inherit;
+            outline: none;
+            font-size: 14px;
+        }
+
+        textarea:focus {
+            border-color: #4f8df7;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+        }
+
+        .send-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 19px;
+            transition: 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #1854cf;
+            transform: translateY(-1px);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ================= QUICK QUESTIONS ================= */
+
+        .quick {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 18px 18px;
+        }
+
+        .quick-btn {
+            border: 1px solid #dce4ef;
+            background: #f8fafc;
+            color: #536075;
+            padding: 9px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: #edf4ff;
+            color: #2563eb;
+            border-color: #bcd2fb;
+        }
+
+        /* ================= SIDE CARDS ================= */
+
+        .side-card {
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .side-card h3 {
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        .safety {
+            background: #fff8e8;
+            border: 1px solid #f7dfaa;
+            border-radius: 14px;
+            padding: 16px;
+            color: #755b19;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .safety strong {
+            display: block;
+            color: #604700;
+            margin-bottom: 5px;
+        }
+
+        /* ================= SPECIALIST ================= */
+
+        .specialist-box {
+            display: none;
+            background: #f3f8ff;
+            border: 1px solid #d8e7ff;
+            border-radius: 14px;
+            padding: 17px;
+        }
+
+        .specialist-label {
+            font-size: 12px;
+            color: #71809a;
+            margin-bottom: 5px;
+        }
+
+        .specialist-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        /* ================= DOCTORS ================= */
+
+        .doctor-list {
+            margin-top: 15px;
+        }
+
+        .doctor-card {
+            border: 1px solid #e2e7ef;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .doctor-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .doctor-specialization {
+            color: #6c778b;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .book-btn {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 10px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .book-btn:hover {
+            background: #1854cf;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal {
+            background: white;
+            width: 100%;
+            max-width: 460px;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .modal h2 {
+            margin-bottom: 6px;
+        }
+
+        .modal-subtitle {
+            color: #788397;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dce2eb;
+            border-radius: 10px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4f8df7;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .cancel-btn {
+            border: 1px solid #dce2eb;
+            background: white;
+        }
+
+        .confirm-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ================= LOADING ================= */
+
+        .typing {
+            display: none;
+            color: #7d8799;
+            font-size: 13px;
+            padding: 0 24px 15px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+
+            .sidebar {
+                width: 75px;
+                padding: 20px 10px;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .nav-text,
+            .nav-title {
+                display: none;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .header {
+                padding: 0 15px;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .main {
+                padding: 20px 14px;
+            }
+
+            .ai-hero {
+                padding: 22px;
+            }
+
+            .ai-icon {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .chat-box {
+                height: 430px;
+            }
+
+            .message-content {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+
+<header class="header">
+
+    <div class="brand">
+        <div class="brand-icon">🏥</div>
+        <span>Hospital Management</span>
+    </div>
+
+    <div class="header-right">
+        <span class="user-name" id="headerUser">User</span>
+        <a href="/user/logout" class="logout">Logout</a>
+    </div>
+
+</header>
+
+
+<div class="layout">
+
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
+
+<aside class="sidebar">
+
+    <div class="nav-title">Portal</div>
+
+    <a href="/user/dashboard" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Dashboard</span>
+    </a>
+
+    <a href="/user/dashboard" class="nav-item">
+        <span class="nav-icon">📅</span>
+        <span class="nav-text">My Appointments</span>
+    </a>
+
+    <a href="/user/dashboard" class="nav-item">
+        <span class="nav-icon">👨‍⚕️</span>
+        <span class="nav-text">My Doctors</span>
+    </a>
+
+    <a href="/ai" class="nav-item active">
+        <span class="nav-icon">🤖</span>
+        <span class="nav-text">AI Assistant</span>
+    </a>
+
+    <a href="/user/dashboard" class="nav-item">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">Profile</span>
+    </a>
+
+</aside>
+
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================ -->
+
+<main class="main">
+
+    <h1 class="page-title">AI Health Assistant</h1>
+
+    <p class="page-subtitle">
+        Get general health guidance, understand your symptoms,
+        and find the right type of healthcare professional.
+    </p>
+
+
+    <!-- HERO -->
+
+    <section class="ai-hero">
+
+        <div class="hero-content">
+
+            <h2>How can I help you today? 👋</h2>
+
+            <p>
+                Describe your symptoms in your own words.
+                I can provide general health information,
+                suggest safe next steps, and help identify
+                the appropriate medical specialization.
+            </p>
+
+        </div>
+
+        <div class="ai-icon">
+            🤖
+        </div>
+
+    </section>
+
+
+    <!-- CONTENT GRID -->
+
+    <div class="content-grid">
+
+
+        <!-- ====================================================
+             CHAT
+        ===================================================== -->
+
+        <section class="card chat-card">
+
+            <div class="card-header">
+
+                <h3>Health Conversation</h3>
+
+                <p>
+                    Tell me what you're experiencing.
+                </p>
+
+            </div>
+
+
+            <div class="chat-box" id="chatBox">
+
+                <div class="message ai">
+
+                    <div class="message-content">
+
+                        <div class="message-label">
+                            AI HEALTH ASSISTANT
+                        </div>
+
+                        Hello! 👋
+
+                        I can help you understand common
+                        symptoms and guide you toward the
+                        appropriate type of medical care.
+
+                        Tell me what you're experiencing.
+
+                        For example:
+
+                        "I have a mild headache since morning
+                        and I didn't sleep well last night."
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="typing" id="typing">
+                🤖 AI is thinking...
+            </div>
+
+
+            <!-- QUICK QUESTIONS -->
+
+            <div class="quick">
+
+                <button class="quick-btn"
+                        onclick="quickQuestion('I have a mild headache.')">
+                    🤕 Headache
+                </button>
+
+                <button class="quick-btn"
+                        onclick="quickQuestion('I have a cough and sore throat.')">
+                    😷 Cough
+                </button>
+
+                <button class="quick-btn"
+                        onclick="quickQuestion('I have stomach pain and gas.')">
+                    🤢 Stomach problem
+                </button>
+
+                <button class="quick-btn"
+                        onclick="quickQuestion('I have a skin rash and itching.')">
+                    🩹 Skin problem
+                </button>
+
+                <button class="quick-btn"
+                        onclick="quickQuestion('I have back pain.')">
+                    🦴 Back pain
+                </button>
+
+            </div>
+
+
+            <!-- INPUT -->
+
+            <div class="input-area">
+
+                <div class="input-wrapper">
+
+                    <textarea
+                        id="messageInput"
+                        placeholder="Describe your symptoms..."
+                        maxlength="5000"></textarea>
+
+                    <button
+                        class="send-btn"
+                        id="sendBtn"
+                        onclick="sendMessage()">
+                        ➤
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             RIGHT SIDE
+        ===================================================== -->
+
+        <aside>
+
+
+            <!-- SPECIALIST -->
+
+            <div class="card side-card"
+                 id="specialistCard"
+                 style="display:none;">
+
+                <h3>Recommended Specialist</h3>
+
+                <div class="specialist-box"
+                     id="specialistBox">
+
+                    <div class="specialist-label">
+                        Based on your symptoms
+                    </div>
+
+                    <div class="specialist-name"
+                         id="specialistName">
+                        General Physician
+                    </div>
+
+                </div>
+
+                <div class="doctor-list"
+                     id="doctorList">
+                </div>
+
+            </div>
+
+
+            <!-- SAFETY -->
+
+            <div class="card side-card">
+
+                <h3>⚠️ Important</h3>
+
+                <div class="safety">
+
+                    <strong>
+                        AI is not a replacement for a doctor.
+                    </strong>
+
+                    This assistant provides general health
+                    information only.
+
+                    If you have severe, sudden, or rapidly
+                    worsening symptoms, seek professional
+                    medical care immediately.
+
+                </div>
+
+            </div>
+
+
+            <!-- FEATURES -->
+
+            <div class="card side-card">
+
+                <h3>What I can help with</h3>
+
+                <p style="font-size:14px;line-height:1.8;color:#69758a;">
+                    ✓ Understand common symptoms<br>
+                    ✓ General self-care guidance<br>
+                    ✓ Identify warning signs<br>
+                    ✓ Suggest a medical specialization<br>
+                    ✓ Find doctors in the hospital<br>
+                    ✓ Book an appointment
+                </p>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+</div>
+
+
+<!-- ============================================================
+     BOOKING MODAL
+============================================================ -->
+
+<div class="modal-overlay" id="bookingModal">
+
+    <div class="modal">
+
+        <h2>Book Appointment</h2>
+
+        <p class="modal-subtitle"
+           id="selectedDoctorText">
+            Select your preferred date and time.
+        </p>
+
+        <input type="hidden"
+               id="selectedDoctorId">
+
+
+        <div class="form-group">
+
+            <label>Select Date</label>
+
+            <input
+                type="date"
+                id="appointmentDate">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Select Time</label>
+
+            <select id="appointmentTime">
+
+                <option value="">
+                    Select available time
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-btn"
+                onclick="closeBooking()">
+                Cancel
+            </button>
+
+            <button
+                class="confirm-btn"
+                onclick="confirmBooking()">
+                Book Appointment
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   GLOBAL VARIABLES
+============================================================ */
+
+let currentDoctors = [];
+
+
+/* ============================================================
+   LOAD USER
+============================================================ */
+
+async function loadUser() {
+
+    try {
+
+        const response = await fetch("/api/user/appointments");
+
+        if (response.status === 401) {
+            return;
+        }
+
+        const data = await response.json();
+
+        /*
+         * The API doesn't return the user directly,
+         * so the header can safely remain "User" if
+         * your dashboard already handles the name.
+         */
+
+    } catch (error) {
+
+        console.log("User loading error:", error);
+
+    }
+}
+
+
+/* ============================================================
+   ADD MESSAGE
+============================================================ */
+
+function addMessage(type, message) {
+
+    const chatBox = document.getElementById("chatBox");
+
+    const messageDiv = document.createElement("div");
+
+    messageDiv.className = "message " + type;
+
+    const content = document.createElement("div");
+
+    content.className = "message-content";
+
+    const label = document.createElement("div");
+
+    label.className = "message-label";
+
+    label.textContent =
+        type === "user"
+        ? "YOU"
+        : "AI HEALTH ASSISTANT";
+
+    const text = document.createElement("div");
+
+    /*
+     * Basic formatting for markdown-style headings/bullets.
+     */
+
+    text.innerHTML = formatAIText(message);
+
+    content.appendChild(label);
+
+    content.appendChild(text);
+
+    messageDiv.appendChild(content);
+
+    chatBox.appendChild(messageDiv);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+/* ============================================================
+   FORMAT AI RESPONSE
+============================================================ */
+
+function formatAIText(text) {
+
+    if (!text) {
+        return "";
+    }
+
+    let safe = escapeHTML(text);
+
+    safe = safe.replace(
+        /^### (.*)$/gm,
+        "<strong style='display:block;margin:12px 0 5px;font-size:15px;'>$1</strong>"
+    );
+
+    safe = safe.replace(
+        /\n/g,
+        "<br>"
+    );
+
+    safe = safe.replace(
+        /• /g,
+        "• "
+    );
+
+    return safe;
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHTML(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+/* ============================================================
+   SEND MESSAGE
+============================================================ */
+
+async function sendMessage() {
+
+    const input =
+        document.getElementById("messageInput");
+
+    const sendBtn =
+        document.getElementById("sendBtn");
+
+    const typing =
+        document.getElementById("typing");
+
+    const message =
+        input.value.trim();
+
+    if (!message) {
+
+        alert("Please describe your symptoms.");
+
+        return;
+    }
+
+
+    addMessage("user", message);
+
+    input.value = "";
+
+    sendBtn.disabled = true;
+
+    typing.style.display = "block";
+
+
+    try {
+
+        const response = await fetch(
+            "/api/ai",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    message: message
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            addMessage(
+                "ai",
+                data.message ||
+                "Sorry, something went wrong."
+            );
+
+            return;
+        }
+
+
+        addMessage(
+            "ai",
+            data.message
+        );
+
+
+        /*
+         * Display recommended specialist
+         */
+
+        if (data.specialization) {
+
+            showSpecialist(
+                data.specialization
+            );
+        }
+
+
+        /*
+         * Display doctors returned
+         * from backend.
+         */
+
+        if (data.doctors) {
+
+            currentDoctors = data.doctors;
+
+            showDoctors(
+                data.doctors
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        addMessage(
+            "ai",
+            "I couldn't connect to the health assistant right now. Please try again."
+        );
+
+    } finally {
+
+        sendBtn.disabled = false;
+
+        typing.style.display = "none";
+
+        input.focus();
+    }
+}
+
+
+/* ============================================================
+   QUICK QUESTION
+============================================================ */
+
+function quickQuestion(question) {
+
+    const input =
+        document.getElementById("messageInput");
+
+    input.value = question;
+
+    input.focus();
+
+}
+
+
+/* ============================================================
+   SHOW SPECIALIST
+============================================================ */
+
+function showSpecialist(specialization) {
+
+    const card =
+        document.getElementById("specialistCard");
+
+    const box =
+        document.getElementById("specialistBox");
+
+    const name =
+        document.getElementById("specialistName");
+
+    card.style.display = "block";
+
+    box.style.display = "block";
+
+    name.textContent =
+        specialization;
+
+}
+
+
+/* ============================================================
+   SHOW DOCTORS
+============================================================ */
+
+function showDoctors(doctors) {
+
+    const list =
+        document.getElementById("doctorList");
+
+    list.innerHTML = "";
+
+
+    if (!doctors || doctors.length === 0) {
+
+        list.innerHTML = `
+            <div style="
+                color:#7b8799;
+                font-size:13px;
+                padding-top:12px;
+            ">
+                No matching doctors were found in the
+                hospital database.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    doctors.forEach((doctor, index) => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "doctor-card";
+
+
+        const name =
+            escapeHTML(
+                doctor.name ||
+                "Doctor"
+            );
+
+
+        const specialization =
+            escapeHTML(
+                doctor.specialization ||
+                "Specialist"
+            );
+
+
+        card.innerHTML = `
+
+            <div class="doctor-name">
+                👨‍⚕️ ${name}
+            </div>
+
+            <div class="doctor-specialization">
+                ${specialization}
+            </div>
+
+            <button
+                class="book-btn"
+                onclick="openBooking(${index})">
+
+                📅 Book Appointment
+
+            </button>
+
+        `;
+
+
+        list.appendChild(card);
+
+    });
+
+}
+
+
+/* ============================================================
+   OPEN BOOKING
+============================================================ */
+
+function openBooking(index) {
+
+    const doctor =
+        currentDoctors[index];
+
+    if (!doctor) {
+        return;
+    }
+
+
+    document.getElementById(
+        "selectedDoctorId"
+    ).value = doctor.id;
+
+
+    document.getElementById(
+        "selectedDoctorText"
+    ).textContent =
+        "Appointment with " +
+        (doctor.name || "Doctor");
+
+
+    const dateInput =
+        document.getElementById(
+            "appointmentDate"
+        );
+
+
+    /*
+     * Minimum date = today
+     */
+
+    const today =
+        new Date()
+        .toISOString()
+        .split("T")[0];
+
+    dateInput.min = today;
+
+    dateInput.value = today;
+
+
+    document.getElementById(
+        "appointmentTime"
+    ).innerHTML = `
+        <option value="">
+            Loading available times...
+        </option>
+    `;
+
+
+    document.getElementById(
+        "bookingModal"
+    ).style.display = "flex";
+
+
+    loadAvailability();
+
+}
+
+
+/* ============================================================
+   CLOSE BOOKING
+============================================================ */
+
+function closeBooking() {
+
+    document.getElementById(
+        "bookingModal"
+    ).style.display = "none";
+
+}
+
+
+/* ============================================================
+   LOAD AVAILABILITY
+============================================================ */
+
+async function loadAvailability() {
+
+    const doctorId =
+        document.getElementById(
+            "selectedDoctorId"
+        ).value;
+
+
+    const date =
+        document.getElementById(
+            "appointmentDate"
+        ).value;
+
+
+    if (!doctorId || !date) {
+        return;
+    }
+
+
+    const select =
+        document.getElementById(
+            "appointmentTime"
+        );
+
+
+    select.innerHTML = `
+        <option value="">
+            Checking availability...
+        </option>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/check-availability",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        doctor_id: doctorId,
+                        date: date
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            select.innerHTML = `
+                <option value="">
+                    Unable to load times
+                </option>
+            `;
+
+            return;
+        }
+
+
+        select.innerHTML = `
+            <option value="">
+                Select available time
+            </option>
+        `;
+
+
+        if (!data.slots ||
+            data.slots.length === 0) {
+
+            select.innerHTML = `
+                <option value="">
+                    No slots available
+                </option>
+            `;
+
+            return;
+        }
+
+
+        data.slots.forEach(slot => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = slot;
+
+            option.textContent = slot;
+
+            select.appendChild(option);
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        select.innerHTML = `
+            <option value="">
+                Unable to load availability
+            </option>
+        `;
+    }
+}
+
+
+/* ============================================================
+   DATE CHANGE
+============================================================ */
+
+document.getElementById(
+    "appointmentDate"
+).addEventListener(
+    "change",
+    loadAvailability
+);
+
+
+/* ============================================================
+   CONFIRM BOOKING
+============================================================ */
+
+async function confirmBooking() {
+
+    const doctorId =
+        document.getElementById(
+            "selectedDoctorId"
+        ).value;
+
+
+    const date =
+        document.getElementById(
+            "appointmentDate"
+        ).value;
+
+
+    const timeSlot =
+        document.getElementById(
+            "appointmentTime"
+        ).value;
+
+
+    if (!doctorId ||
+        !date ||
+        !timeSlot) {
+
+        alert(
+            "Please select a date and available time."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/book-appointment",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        doctor_id: doctorId,
+
+                        date: date,
+
+                        time_slot: timeSlot
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            alert(
+                data.message ||
+                "Unable to book appointment."
+            );
+
+            return;
+        }
+
+
+        alert(
+            "✅ Appointment booked successfully!"
+        );
+
+
+        closeBooking();
+
+
+        addMessage(
+            "ai",
+            "Your appointment has been booked successfully for " +
+            date +
+            " at " +
+            timeSlot +
+            ". You can view it in My Appointments."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to connect to the server."
+        );
+
+    }
+}
+
+
+/* ============================================================
+   ENTER KEY
+============================================================ */
+
+document.getElementById(
+    "messageInput"
+).addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+
+    }
+);
+
+
+/* ============================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+============================================================ */
+
+document.getElementById(
+    "bookingModal"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            document.getElementById(
+                "bookingModal"
+            )
+        ) {
+
+            closeBooking();
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   INITIALIZATION
+============================================================ */
+
+loadUser();
+
+</script>
+
+</body>
+</html>
+```

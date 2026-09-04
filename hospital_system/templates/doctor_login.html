@@ -1,0 +1,408 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Login | Hospital Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #eef5ff, #f8fbff);
+            color: #172033;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .brand-icon {
+            width: 62px;
+            height: 62px;
+            margin: auto;
+            border-radius: 18px;
+            background: #e7f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 31px;
+            margin-bottom: 12px;
+        }
+
+        .brand h1 {
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .brand p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .login-card {
+            background: white;
+            border: 1px solid #e5eaf2;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 15px 45px rgba(30, 60, 100, 0.08);
+        }
+
+        .login-card h2 {
+            font-size: 21px;
+            margin-bottom: 7px;
+        }
+
+        .subtitle {
+            color: #7a8496;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d9e0ea;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2875e8;
+            box-shadow: 0 0 0 3px rgba(40, 117, 232, 0.08);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 45px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .login-btn:hover {
+            background: #1854cf;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0f0;
+            color: #c62828;
+            border: 1px solid #ffd2d2;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back a {
+            text-decoration: none;
+            color: #2563eb;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .security {
+            margin-top: 22px;
+            padding: 13px;
+            border-radius: 10px;
+            background: #f5f8fc;
+            color: #69758a;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="brand">
+        <div class="brand-icon">👨‍⚕️</div>
+
+        <h1>Hospital Management</h1>
+
+        <p>Secure Doctor Portal</p>
+    </div>
+
+
+    <div class="login-card">
+
+        <h2>Doctor Login</h2>
+
+        <p class="subtitle">
+            Sign in to manage appointments and patients.
+        </p>
+
+
+        <div id="message" class="message"></div>
+
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="doctorId">
+                    Doctor ID / Email
+                </label>
+
+                <input
+                    type="text"
+                    id="doctorId"
+                    placeholder="Enter your doctor ID or email"
+                    required
+                    autocomplete="username"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword()">
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn"
+                id="loginBtn">
+
+                Sign In
+
+            </button>
+
+        </form>
+
+
+        <div class="security">
+            🔒 Doctor accounts are protected by secure
+            authentication.
+        </div>
+
+    </div>
+
+
+    <div class="back">
+        <a href="/">← Back to Hospital Portal</a>
+    </div>
+
+</div>
+
+
+<script>
+
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    password.type =
+        password.type === "password"
+        ? "text"
+        : "password";
+}
+
+
+document.getElementById(
+    "loginForm"
+).addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const doctorId =
+            document.getElementById(
+                "doctorId"
+            ).value.trim();
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+        const button =
+            document.getElementById(
+                "loginBtn"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        message.style.display = "none";
+
+        button.disabled = true;
+
+        button.textContent = "Signing in...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/doctor/login",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            doctor_id: doctorId,
+                            password: password
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (data.success) {
+
+                window.location.href =
+                    "/doctor/dashboard";
+
+                return;
+            }
+
+
+            message.textContent =
+                data.message ||
+                "Invalid doctor credentials.";
+
+            message.className =
+                "message error";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                "Unable to connect to the server.";
+
+            message.className =
+                "message error";
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent = "Sign In";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+```

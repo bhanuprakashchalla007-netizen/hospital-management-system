@@ -162,6 +162,17 @@
   @media (max-width: 1000px) {
     .stats-grid, .charts-grid, .charts-grid-3, .rev-grid { grid-template-columns: 1fr 1fr; }
   }
+
+  /* ── AI ASSISTANT ── */
+  .ai-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow)}
+  .ai-box h3{font-size:18px;font-weight:600;margin-bottom:6px}.ai-box>p{color:var(--muted);margin-bottom:1rem}
+  .ai-examples{background:#F0F7F4;border-radius:9px;padding:12px 15px;margin-bottom:12px;line-height:1.7}.ai-examples strong{display:block}
+  .ai-textarea{width:100%;min-height:105px;resize:vertical;font-family:inherit;font-size:13px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);outline:none}.ai-textarea:focus{border-color:var(--green);background:#fff}
+  .ai-find-btn,.ai-book-btn{margin-top:10px;padding:9px 18px;border:0;border-radius:7px;background:var(--green);color:#fff;font-size:13px;font-weight:500;cursor:pointer}.ai-find-btn:hover,.ai-book-btn:hover{background:#168a63}
+  #ai-response{margin-top:18px}.ai-message{background:#F0F2F4;padding:14px 16px;border-radius:9px;line-height:1.5;margin-bottom:14px}.ai-doctors-title{font-size:14px;font-weight:600;margin:14px 0 8px}
+  .ai-doctor-card{border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:10px;background:#fff}.ai-doctor-card h3{font-size:15px;margin-bottom:7px}.ai-badge{display:inline-block;background:var(--green-light);color:#0B5E40;padding:4px 9px;border-radius:20px;font-size:11px;margin-bottom:8px}.ai-doctor-card p{font-size:12px;color:var(--muted);margin:5px 0}
+  .ai-doctor-card label{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:12px}.ai-date,.ai-patient{display:block;width:100%;max-width:360px;font-size:13px;padding:7px 9px;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);margin-top:5px;outline:none}.ai-date{max-width:260px}.ai-slots{margin-top:10px;font-size:12px;color:var(--muted)}
+  .ai-slot{display:inline-block;background:var(--blue-light);color:#174A78;padding:7px 10px;margin:5px 5px 0 0;border-radius:6px;cursor:pointer;font-size:12px;border:1px solid transparent}.ai-slot:hover,.ai-slot.selected{border-color:var(--blue);font-weight:600}.ai-booking{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}.ai-book-btn{font-size:12px;padding:8px 14px}.ai-loading{color:var(--muted);padding:10px 0}.ai-success{background:var(--green-light);color:#0B5E40;padding:14px;border-radius:9px;margin-top:12px;line-height:1.7}
 </style>
 </head>
 <body>
@@ -198,6 +209,10 @@
     <div class="nav-item" onclick="showPage('billing',this)">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       Billing
+    </div>
+    <div class="nav-item" onclick="showPage('ai',this)">
+      <span class="nav-icon" style="font-size:15px;display:flex;align-items:center;justify-content:center">🤖</span>
+      AI Assistant
     </div>
 
     <div class="sidebar-footer">
@@ -537,6 +552,23 @@
         </div>
 
       </div><!-- /billing -->
+
+      <!-- ══ AI ASSISTANT PAGE ═════════════════════════ -->
+      <div class="page" id="page-ai">
+        <div class="ai-box">
+          <h3>🤖 AI Hospital Assistant</h3>
+          <p>Tell me what kind of doctor or appointment you need.</p>
+          <div class="ai-examples"><strong>Try these examples:</strong>
+            "I need a cardiologist"<br>
+            "I need a doctor for diabetes"<br>
+            "I need an orthopedic doctor"<br>
+            "I have a skin problem"
+          </div>
+          <textarea id="ai-message" class="ai-textarea" placeholder="Describe what doctor you need..."></textarea>
+          <button class="ai-find-btn" onclick="askDashboardAI()">🤖 Find Doctor</button>
+          <div id="ai-response"></div>
+        </div>
+      </div><!-- /ai -->
 
     </div><!-- /content -->
   </div><!-- /main -->
@@ -920,6 +952,27 @@ function updateCharts() {
   const pendingC = bills.filter(b=>!(b.is_paid||b.paid)).length;
   makeChart('billChart', 'doughnut', ['Paid','Pending'], [paidC, pendingC]);
 }
+
+
+  /* ══ AI ASSISTANT ══ */
+  let aiSelectedSlots = {};
+  function aiEscapeHtml(text){const d=document.createElement('div');d.textContent=text==null?'':String(text);return d.innerHTML;}
+  async function askDashboardAI(){
+    const message=document.getElementById('ai-message').value.trim(),box=document.getElementById('ai-response');
+    if(!message){toast('Please enter your requirement','var(--red)');return;}
+    box.innerHTML='<div class="ai-loading">🤖 AI is finding suitable doctors...</div>';
+    try{const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message})});const x=await r.json();
+      if(!x.success){box.innerHTML='<div class="ai-message">'+aiEscapeHtml(x.message)+'</div>';return;}
+      let h='<div class="ai-message"><strong>🤖 AI Assistant</strong><br>'+aiEscapeHtml(x.message)+'</div>';
+      if(x.doctors&&x.doctors.length){h+='<div class="ai-doctors-title">👨‍⚕️ Suitable Doctors</div>';x.doctors.forEach(d=>h+=createDashboardDoctorCard(d));}
+      else h+='<div class="ai-message">I could not find a matching doctor in our demo database. Try searching for a cardiologist, diabetologist, orthopedic doctor, dermatologist or general medicine doctor.</div>';
+      box.innerHTML=h;const today=new Date().toISOString().split('T')[0];document.querySelectorAll('.ai-date').forEach(e=>e.min=today);
+    }catch(e){console.error(e);box.innerHTML='<div class="ai-message">❌ Something went wrong. Please check that Flask is running.</div>';}
+  }
+  function createDashboardDoctorCard(d){return `<div class="ai-doctor-card"><h3>${aiEscapeHtml(d.name)}</h3><span class="ai-badge">${aiEscapeHtml(d.specialization)}</span><p>Department: ${aiEscapeHtml(d.department)}</p><p>Consultation Fee: ₹${aiEscapeHtml(d.consultation_fee)}</p><label>Select appointment date:<input class="ai-date" type="date" id="ai-date-${d.id}" onchange="checkDashboardAvailability(${d.id})"></label><div class="ai-slots" id="ai-slots-${d.id}">Select a date to see available slots.</div><div class="ai-booking" id="ai-booking-${d.id}" style="display:none"><label>Patient Name<input class="ai-patient" type="text" id="ai-patient-${d.id}" placeholder="Enter patient name"></label><button class="ai-book-btn" onclick="bookDashboardAIAppointment(${d.id})">📅 Book Appointment</button></div></div>`;}
+  async function checkDashboardAvailability(id){const date=document.getElementById('ai-date-'+id).value,box=document.getElementById('ai-slots-'+id);if(!date)return;box.innerHTML='Checking availability...';document.getElementById('ai-booking-'+id).style.display='none';aiSelectedSlots[id]=null;try{const r=await fetch('/api/check-availability',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({doctor_id:id,date})});const x=await r.json();if(!x.success){box.innerHTML=aiEscapeHtml(x.message);return;}if(!x.available_slots||!x.available_slots.length){box.innerHTML='❌ No slots available.';return;}box.innerHTML='<strong>Available slots:</strong><br>'+x.available_slots.map(slot=>`<span class="ai-slot" onclick="selectDashboardSlot(${id},'${aiEscapeHtml(slot)}',this)">${aiEscapeHtml(slot)}</span>`).join('');}catch(e){console.error(e);box.innerHTML='Could not check availability.';}}
+  function selectDashboardSlot(id,slot,el){aiSelectedSlots[id]=slot;document.querySelectorAll('#ai-slots-'+id+' .ai-slot').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');document.getElementById('ai-booking-'+id).style.display='block';}
+  async function bookDashboardAIAppointment(id){const patient=document.getElementById('ai-patient-'+id).value.trim(),date=document.getElementById('ai-date-'+id).value,time=aiSelectedSlots[id];if(!patient){toast('Please enter patient name','var(--red)');return;}if(!time){toast('Please select an appointment slot','var(--red)');return;}try{const r=await fetch('/api/book-appointment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({patient_name:patient,doctor_id:id,date,time_slot:time})});const x=await r.json();if(!x.success){toast(x.message||'Booking failed','var(--red)');return;}const a=x.appointment;document.getElementById('ai-response').innerHTML+=`<div class="ai-success">✅ <strong>Appointment Confirmed!</strong><br>Appointment ID: <strong>${aiEscapeHtml(a.id)}</strong><br>Patient: ${aiEscapeHtml(a.patient_name)}<br>Doctor: ${aiEscapeHtml(a.doctor_name)}<br>Date: ${aiEscapeHtml(a.date)}<br>Time: ${aiEscapeHtml(a.time_slot)}</div>`;toast('Appointment booked successfully');aiSelectedSlots[id]=null;}catch(e){console.error(e);toast('Booking failed','var(--red)');}}
 
 /* ════════════════════════════════════════════════════════
    INIT

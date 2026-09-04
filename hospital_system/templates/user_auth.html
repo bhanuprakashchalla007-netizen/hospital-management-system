@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Authentication | Hospital Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef5ff, #f8fbff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            color: #172033;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+        }
+
+        .left {
+            background: #2563eb;
+            color: white;
+            padding: 55px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            background: white;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .left h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .left p {
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .features {
+            margin-top: 30px;
+        }
+
+        .feature {
+            margin: 15px 0;
+            font-size: 15px;
+        }
+
+        .right {
+            padding: 40px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .tab.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dbe2ea;
+            border-radius: 9px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        .button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            display: none;
+            padding: 11px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            color: #2563eb;
+        }
+
+        @media (max-width: 750px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .left {
+                display: none;
+            }
+
+            .right {
+                padding: 30px 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT SIDE -->
+
+    <div class="left">
+
+        <div class="logo">+</div>
+
+        <h1>Patient Care Portal</h1>
+
+        <p>
+            Access your healthcare information,
+            book appointments and connect with
+            doctors from one secure portal.
+        </p>
+
+        <div class="features">
+            <div class="feature">✓ Book doctor appointments</div>
+            <div class="feature">✓ Manage your profile</div>
+            <div class="feature">✓ View your appointments</div>
+            <div class="feature">✓ Access AI doctor assistance</div>
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+
+    <div class="right">
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                onclick="showForm('login', this)"
+            >
+                Login
+            </button>
+
+            <button
+                class="tab"
+                onclick="showForm('signup', this)"
+            >
+                Create Account
+            </button>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="login" class="form active">
+
+            <h2>Welcome Back</h2>
+
+            <p class="description">
+                Login to access your healthcare dashboard.
+            </p>
+
+            <div id="loginMessage" class="message"></div>
+
+            <form onsubmit="loginUser(event)">
+
+                <div class="field">
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <button class="button">
+                    Login
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- SIGNUP -->
+
+        <div id="signup" class="form">
+
+            <h2>Create Account</h2>
+
+            <p class="description">
+                Create your personal healthcare account.
+            </p>
+
+            <div id="signupMessage" class="message"></div>
+
+            <form onsubmit="signupUser(event)">
+
+                <div class="grid">
+
+                    <div class="field full">
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter phone number"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>Date of Birth</label>
+
+                        <input
+                            type="date"
+                            id="dob"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>Gender</label>
+
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+
+                    <div class="field">
+                        <label>Blood Group</label>
+
+                        <select id="blood_group" required>
+                            <option value="">Select Blood Group</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+                        </select>
+                    </div>
+
+
+                    <div class="field">
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Create password"
+                            minlength="6"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>Confirm Password</label>
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            placeholder="Confirm password"
+                            minlength="6"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button class="button">
+                    Create Account
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <a href="/" class="back">
+            ← Back to Portal Selection
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function showForm(formName, button) {
+
+    document
+        .querySelectorAll(".form")
+        .forEach(form => form.classList.remove("active"));
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(tab => tab.classList.remove("active"));
+
+    document
+        .getElementById(formName)
+        .classList.add("active");
+
+    button.classList.add("active");
+}
+
+
+function showMessage(id, message, type) {
+
+    const box = document.getElementById(id);
+
+    box.textContent = message;
+
+    box.className = "message " + type;
+}
+
+
+async function signupUser(event) {
+
+    event.preventDefault();
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirm_password").value;
+
+    if (password !== confirmPassword) {
+
+        showMessage(
+            "signupMessage",
+            "Passwords do not match.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const user = {
+
+        name: document.getElementById("name").value,
+
+        email: document.getElementById("email").value,
+
+        phone: document.getElementById("phone").value,
+
+        dob: document.getElementById("dob").value,
+
+        gender: document.getElementById("gender").value,
+
+        blood_group:
+            document.getElementById("blood_group").value,
+
+        password: password
+    };
+
+
+    try {
+
+        const response = await fetch(
+            "/api/user/signup",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(user)
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        if (result.success) {
+
+            showMessage(
+                "signupMessage",
+                result.message,
+                "success"
+            );
+
+            setTimeout(() => {
+
+                document
+                    .querySelectorAll(".tab")[0]
+                    .click();
+
+                document
+                    .getElementById("loginEmail")
+                    .value = user.email;
+
+            }, 1000);
+
+        } else {
+
+            showMessage(
+                "signupMessage",
+                result.message,
+                "error"
+            );
+        }
+
+    } catch (error) {
+
+        showMessage(
+            "signupMessage",
+            "Unable to connect to server.",
+            "error"
+        );
+    }
+}
+
+
+async function loginUser(event) {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("loginEmail").value;
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+
+    try {
+
+        const response = await fetch(
+            "/api/user/login",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        if (result.success) {
+
+            showMessage(
+                "loginMessage",
+                "Login successful. Redirecting...",
+                "success"
+            );
+
+            setTimeout(() => {
+                window.location.href =
+                    "/user/dashboard";
+            }, 700);
+
+        } else {
+
+            showMessage(
+                "loginMessage",
+                result.message,
+                "error"
+            );
+        }
+
+    } catch (error) {
+
+        showMessage(
+            "loginMessage",
+            "Unable to connect to server.",
+            "error"
+        );
+    }
+}
+
+</script>
+
+</body>
+</html>
