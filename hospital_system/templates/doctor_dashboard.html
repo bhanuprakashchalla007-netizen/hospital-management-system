@@ -1,482 +1,413 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Doctor Dashboard | Hospital Management</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Inter, Arial, sans-serif;
-            background: #f5f8fc;
-            color: #172033;
-        }
-
-
-        /* ================= HEADER ================= */
-
-        .header {
-            height: 72px;
-            background: white;
-            border-bottom: 1px solid #e5e9f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 750;
-            font-size: 19px;
-        }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: #e8f1ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 21px;
-        }
-
-        .doctor-user {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .doctor-name {
-            font-weight: 650;
-        }
-
-        .logout {
-            color: #dc3545;
-            text-decoration: none;
-            font-weight: 650;
-        }
-
-
-        /* ================= LAYOUT ================= */
-
-        .layout {
-            display: flex;
-            min-height: calc(100vh - 72px);
-        }
-
-
-        .sidebar {
-            width: 235px;
-            background: white;
-            border-right: 1px solid #e5e9f0;
-            padding: 25px 15px;
-        }
-
-        .nav-title {
-            font-size: 11px;
-            color: #8b95a7;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 5px 12px 13px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 13px 14px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            color: #59657a;
-            text-decoration: none;
-            font-weight: 550;
-            cursor: pointer;
-        }
-
-        .nav-item:hover {
-            background: #f1f5fb;
-            color: #2563eb;
-        }
-
-        .nav-item.active {
-            background: #eaf2ff;
-            color: #2563eb;
-            font-weight: 700;
-        }
-
-        .nav-icon {
-            width: 22px;
-            text-align: center;
-        }
-
-
-        /* ================= MAIN ================= */
-
-        .main {
-            flex: 1;
-            padding: 32px;
-            max-width: 1400px;
-        }
-
-        .welcome {
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            font-size: 29px;
-            margin-bottom: 7px;
-        }
-
-        .welcome p {
-            color: #758095;
-        }
-
-
-        /* ================= STATS ================= */
-
-        .stats {
-            display: grid;
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-
-            gap: 17px;
-            margin-bottom: 25px;
-        }
-
-        .stat {
-            background: white;
-            border: 1px solid #e5eaf1;
-            border-radius: 16px;
-            padding: 21px;
-        }
-
-        .stat-label {
-            color: #758095;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .stat-number {
-            font-size: 27px;
-            font-weight: 750;
-        }
-
-        .stat-icon {
-            float: right;
-            font-size: 25px;
-        }
-
-
-        /* ================= CONTENT ================= */
-
-        .card {
-            background: white;
-            border: 1px solid #e5eaf1;
-            border-radius: 17px;
-            overflow: hidden;
-        }
-
-        .card-header {
-            padding: 21px 23px;
-            border-bottom: 1px solid #edf0f4;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card-header h2 {
-            font-size: 18px;
-        }
-
-        .card-header p {
-            color: #7b8597;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-
-
-        /* ================= APPOINTMENTS ================= */
-
-        .appointment-list {
-            padding: 8px 22px 22px;
-        }
-
-        .appointment {
-            display: grid;
-            grid-template-columns:
-                90px
-                1fr
-                130px
-                210px;
-
-            align-items: center;
-            gap: 20px;
-
-            padding: 18px 5px;
-
-            border-bottom: 1px solid #edf0f4;
-        }
-
-        .appointment:last-child {
-            border-bottom: none;
-        }
-
-        .time {
-            font-weight: 750;
-            color: #2563eb;
-        }
-
-        .patient-name {
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .reason {
-            color: #7a8497;
-            font-size: 13px;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .status.pending {
-            background: #fff4d8;
-            color: #9a6a00;
-        }
-
-        .status.confirmed {
-            background: #e8f7ee;
-            color: #18834b;
-        }
-
-        .status.rejected {
-            background: #fff0f0;
-            color: #c62828;
-        }
-
-        .status.completed {
-            background: #e9f0ff;
-            color: #315fc2;
-        }
-
-
-        /* ================= BUTTONS ================= */
-
-        .actions {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            font-family: inherit;
-        }
-
-        .btn {
-            border: none;
-            border-radius: 8px;
-            padding: 9px 12px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .accept {
-            background: #e7f7ee;
-            color: #18834b;
-        }
-
-        .accept:hover {
-            background: #d7f0e2;
-        }
-
-        .reject {
-            background: #fff0f0;
-            color: #c62828;
-        }
-
-        .reject:hover {
-            background: #ffe0e0;
-        }
-
-        .view {
-            background: #edf3ff;
-            color: #2563eb;
-        }
-
-        .view:hover {
-            background: #dce9ff;
-        }
-
-
-        /* ================= EMPTY ================= */
-
-        .empty {
-            text-align: center;
-            padding: 55px 20px;
-            color: #7b8597;
-        }
-
-        .empty-icon {
-            font-size: 42px;
-            margin-bottom: 10px;
-        }
-
-
-        /* ================= TOAST ================= */
-
-        .toast {
-            position: fixed;
-            right: 25px;
-            bottom: 25px;
-            padding: 14px 18px;
-            border-radius: 10px;
-            background: #172033;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15);
-            display: none;
-            z-index: 100;
-            font-size: 14px;
-        }
-
-
-        /* ================= RESPONSIVE ================= */
-
-        @media(max-width:1000px) {
-
-            .stats {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-            .appointment {
-                grid-template-columns:
-                    80px
-                    1fr
-                    100px;
-            }
-
-            .actions {
-                grid-column: 1 / -1;
-            }
-
-        }
-
-
-        @media(max-width:700px) {
-
-            .sidebar {
-                width: 70px;
-            }
-
-            .nav-text,
-            .nav-title {
-                display: none;
-            }
-
-            .nav-item {
-                justify-content: center;
-            }
-
-            .main {
-                padding: 20px 14px;
-            }
-
-            .header {
-                padding: 0 15px;
-            }
-
-            .doctor-name {
-                display: none;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .appointment {
-                display: block;
-                padding: 18px 5px;
-            }
-
-            .time,
-            .patient,
-            .status-wrapper {
-                margin-bottom: 9px;
-            }
-
-            .actions {
-                margin-top: 12px;
-            }
-
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Portal | MediCare</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    background: #f5f7fb;
+    color: #182235;
+}
+
+button {
+    font: inherit;
+}
+
+/* TOP BAR */
+.top {
+    height: 72px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e9f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1769aa;
+}
+
+.brand span {
+    color: #21a179;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #e8f3ff;
+    color: #1769aa;
+    font-weight: 800;
+}
+
+.profile small {
+    display: block;
+    color: #7a8798;
+    margin-top: 2px;
+}
+
+.logout {
+    border: 0;
+    background: #fff;
+    color: #d64545;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: 12px;
+}
+
+/* LAYOUT */
+.layout {
+    display: flex;
+    min-height: calc(100vh - 72px);
+}
+
+/* SIDEBAR */
+.side {
+    width: 240px;
+    background: #10233f;
+    color: #dbe7f7;
+    padding: 24px 14px;
+    flex-shrink: 0;
+}
+
+.side h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9fb2ca;
+    margin: 8px 14px 18px;
+}
+
+.nav {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #dbe7f7;
+    text-align: left;
+    padding: 13px 14px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    font-weight: 650;
+}
+
+.nav:hover,
+.nav.active {
+    background: #1d426b;
+    color: #fff;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 30px;
+    max-width: 1450px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(135deg, #1769aa, #21a179);
+    color: white;
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 22px;
+}
+
+.hero h1 {
+    font-size: 29px;
+    margin-bottom: 7px;
+}
+
+.hero p {
+    opacity: .9;
+}
+
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e5e9f0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(20,40,70,.04);
+}
+
+.card small {
+    color: #738097;
+}
+
+.num {
+    font-size: 30px;
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+/* PANELS */
+.panel {
+    background: #fff;
+    border: 1px solid #e5e9f0;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 6px 20px rgba(20,40,70,.04);
+}
+
+.panelhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.panelhead h2 {
+    font-size: 20px;
+}
+
+/* BUTTONS */
+.btn {
+    border: 0;
+    border-radius: 9px;
+    padding: 9px 13px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.refresh {
+    background: #eef5fb;
+    color: #1769aa;
+}
+
+.confirm {
+    background: #e5f7ef;
+    color: #147b4c;
+}
+
+.reject {
+    background: #ffe8e8;
+    color: #b72c2c;
+}
+
+.consult {
+    background: #e8f3ff;
+    color: #1769aa;
+}
+
+.view {
+    background: #f0eefc;
+    color: #6346a8;
+}
+
+/* TABLE */
+.tablewrap {
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 14px 10px;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+th {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #738097;
+}
+
+/* STATUS */
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.booked,
+.scheduled {
+    background: #fff4dc;
+    color: #996500;
+}
+
+.confirmed {
+    background: #e5f7ef;
+    color: #147b4c;
+}
+
+.rejected {
+    background: #ffe8e8;
+    color: #b72c2c;
+}
+
+.completed {
+    background: #e7eefc;
+    color: #315ca8;
+}
+
+.empty {
+    text-align: center;
+    padding: 45px;
+    color: #7b8798;
+}
+
+/* PROFILE */
+.profilebox {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.info {
+    background: #f8fafc;
+    border: 1px solid #e7ebf1;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.info label {
+    display: block;
+    color: #78869a;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.info strong {
+    font-size: 16px;
+}
+
+/* NOTICE */
+.notice {
+    padding: 13px 15px;
+    border-radius: 10px;
+    background: #fff8e8;
+    color: #795900;
+    margin-bottom: 16px;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    background: #172033;
+    color: #fff;
+    padding: 13px 17px;
+    border-radius: 10px;
+    display: none;
+    z-index: 50;
+}
+
+/* RESPONSIVE */
+@media(max-width:950px) {
+
+    .side {
+        width: 190px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:650px) {
+
+    .side {
+        display: none;
+    }
+
+    .main {
+        padding: 16px;
+    }
+
+    .cards,
+    .profilebox {
+        grid-template-columns: 1fr;
+    }
+
+    .top {
+        padding: 0 16px;
+    }
+
+    .profile small {
+        display: none;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
-
-<!-- ============================================================
-     HEADER
-============================================================ -->
-
-<header class="header">
+<!-- TOP BAR -->
+<header class="top">
 
     <div class="brand">
-
-        <div class="brand-icon">
-            🏥
-        </div>
-
-        <span>
-            Hospital Management
-        </span>
-
+        🏥 MediCare <span>Doctor</span>
     </div>
 
+    <div class="profile">
 
-    <div class="doctor-user">
+        <div class="avatar" id="avatar">
+            DR
+        </div>
 
-        <span
-            class="doctor-name"
-            id="doctorName">
-            Doctor
-        </span>
+        <div>
+            <strong id="doctorName">
+                Doctor
+            </strong>
 
-        <a
-            href="/doctor/logout"
-            class="logout">
+            <small id="doctorSpecialization">
+                Medical Specialist
+            </small>
+        </div>
+
+        <button class="logout"
+                onclick="location.href='/doctor/logout'">
             Logout
-        </a>
+        </button>
 
     </div>
 
@@ -485,177 +416,135 @@
 
 <div class="layout">
 
+<!-- SIDEBAR -->
 
-<!-- ============================================================
-     SIDEBAR
-============================================================ -->
+<aside class="side">
 
-<aside class="sidebar">
-
-    <div class="nav-title">
+    <h3>
         Doctor Portal
-    </div>
+    </h3>
 
+    <button class="nav active"
+            data-page="home">
 
-    <a
-        href="/doctor/dashboard"
-        class="nav-item active">
+        🏠 Dashboard
 
-        <span class="nav-icon">
-            🏠
-        </span>
+    </button>
 
-        <span class="nav-text">
-            Dashboard
-        </span>
+    <button class="nav"
+            data-page="appointments">
 
-    </a>
+        📅 Appointments
 
+    </button>
 
-    <a
-        href="#appointments"
-        class="nav-item">
+    <button class="nav"
+            data-page="patients">
 
-        <span class="nav-icon">
-            📅
-        </span>
+        👥 Patients
 
-        <span class="nav-text">
-            Appointments
-        </span>
+    </button>
 
-    </a>
+    <button class="nav"
+            data-page="consultations">
 
+        🩺 Consultations
 
-    <a
-        href="#patients"
-        class="nav-item">
+    </button>
 
-        <span class="nav-icon">
-            👥
-        </span>
+    <button class="nav"
+            data-page="profile">
 
-        <span class="nav-text">
-            Patients
-        </span>
+        👤 My Profile
 
-    </a>
-
-
-    <a
-        href="#profile"
-        class="nav-item">
-
-        <span class="nav-icon">
-            👤
-        </span>
-
-        <span class="nav-text">
-            Profile
-        </span>
-
-    </a>
+    </button>
 
 </aside>
 
 
-<!-- ============================================================
-     MAIN
-============================================================ -->
+<!-- MAIN CONTENT -->
 
 <main class="main">
 
 
-    <div class="welcome">
+<!-- ================= DASHBOARD ================= -->
+
+<section id="home"
+         class="page active">
+
+    <div class="hero">
 
         <h1>
-            Good morning, Doctor 👋
+
+            Good day, Dr.
+            <span id="heroName">
+                Doctor
+            </span>
+            👋
+
         </h1>
 
         <p>
-            Here's what's happening with your patients today.
+            Manage your appointments, patients and consultations from one place.
         </p>
 
     </div>
 
 
-    <!-- ========================================================
-         STATISTICS
-    ========================================================= -->
+    <!-- STATISTICS -->
 
-    <div class="stats">
+    <div class="cards">
 
+        <div class="card">
 
-        <div class="stat">
+            <small>
+                Total Appointments
+            </small>
 
-            <span class="stat-icon">
-                📅
-            </span>
-
-            <div class="stat-label">
-                Today's Appointments
-            </div>
-
-            <div
-                class="stat-number"
-                id="todayCount">
+            <div class="num"
+                 id="total">
                 0
             </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <span class="stat-icon">
-                ⏳
-            </span>
-
-            <div class="stat-label">
+            <small>
                 Pending Requests
-            </div>
+            </small>
 
-            <div
-                class="stat-number"
-                id="pendingCount">
+            <div class="num"
+                 id="pending">
                 0
             </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <span class="stat-icon">
-                👥
-            </span>
+            <small>
+                Confirmed
+            </small>
 
-            <div class="stat-label">
-                Total Patients
-            </div>
-
-            <div
-                class="stat-number"
-                id="patientCount">
+            <div class="num"
+                 id="confirmed">
                 0
             </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <span class="stat-icon">
-                ✅
-            </span>
-
-            <div class="stat-label">
+            <small>
                 Completed
-            </div>
+            </small>
 
-            <div
-                class="stat-number"
-                id="completedCount">
+            <div class="num"
+                 id="completed">
                 0
             </div>
 
@@ -664,55 +553,445 @@
     </div>
 
 
-    <!-- ========================================================
-         APPOINTMENTS
-    ========================================================= -->
+    <!-- UPCOMING APPOINTMENTS -->
 
-    <section
-        class="card"
-        id="appointments">
+    <div class="panel">
 
+        <div class="panelhead">
 
-        <div class="card-header">
+            <h2>
+                Today's / Upcoming Appointments
+            </h2>
 
-            <div>
+            <button class="btn refresh"
+                    onclick="loadAppointments()">
 
-                <h2>
-                    Today's Appointments
-                </h2>
-
-                <p>
-                    Review and manage your patient appointments.
-                </p>
-
-            </div>
-
-            <button
-                class="btn view"
-                onclick="loadAppointments()">
                 ↻ Refresh
+
             </button>
 
         </div>
 
 
-        <div
-            class="appointment-list"
-            id="appointmentList">
+        <div class="tablewrap">
 
-            <div class="empty">
+            <table>
 
-                <div class="empty-icon">
-                    ⏳
-                </div>
+                <thead>
 
-                Loading appointments...
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="homeBody">
+
+                    <tr>
+
+                        <td colspan="5"
+                            class="empty">
+
+                            Loading...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= APPOINTMENTS ================= -->
+
+<section id="appointments"
+         class="page">
+
+    <div class="panel">
+
+        <div class="panelhead">
+
+            <div>
+
+                <h2>
+                    All Appointments
+                </h2>
+
+                <p style="color:#78869a;margin-top:4px">
+
+                    Review and respond to patient booking requests.
+
+                </p>
+
+            </div>
+
+
+            <button class="btn refresh"
+                    onclick="loadAppointments()">
+
+                ↻ Refresh
+
+            </button>
+
+        </div>
+
+
+        <div class="tablewrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Specialization
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="appointmentBody">
+
+                    <tr>
+
+                        <td colspan="6"
+                            class="empty">
+
+                            Loading...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PATIENTS ================= -->
+
+<section id="patients"
+         class="page">
+
+    <div class="panel">
+
+        <div class="panelhead">
+
+            <div>
+
+                <h2>
+                    My Patients
+                </h2>
+
+                <p style="color:#78869a;margin-top:4px">
+
+                    Patients who have appointments with you.
+
+                </p>
+
+            </div>
+
+
+            <button class="btn refresh"
+                    onclick="loadAppointments()">
+
+                ↻ Refresh
+
+            </button>
+
+        </div>
+
+
+        <div class="tablewrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Appointment Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Open Record
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="patientBody">
+
+                    <tr>
+
+                        <td colspan="5"
+                            class="empty">
+
+                            Loading...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CONSULTATIONS ================= -->
+
+<section id="consultations"
+         class="page">
+
+    <div class="panel">
+
+        <div class="panelhead">
+
+            <div>
+
+                <h2>
+                    Consultations
+                </h2>
+
+                <p style="color:#78869a;margin-top:4px">
+
+                    Open a confirmed appointment to view the patient record.
+
+                </p>
 
             </div>
 
         </div>
 
-    </section>
+
+        <div class="notice">
+
+            💡 Confirm an appointment first.
+
+            Then use
+
+            <b>
+                Consult
+            </b>
+
+            to open the patient's medical record.
+
+        </div>
+
+
+        <div class="tablewrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="consultBody">
+
+                    <tr>
+
+                        <td colspan="5"
+                            class="empty">
+
+                            Loading...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PROFILE ================= -->
+
+<section id="profile"
+         class="page">
+
+    <div class="panel">
+
+        <div class="panelhead">
+
+            <h2>
+                My Profile
+            </h2>
+
+        </div>
+
+
+        <div class="profilebox">
+
+            <div class="info">
+
+                <label>
+                    Doctor ID
+                </label>
+
+                <strong id="profileId">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <label>
+                    Name
+                </label>
+
+                <strong id="profileName">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <label>
+                    Email
+                </label>
+
+                <strong id="profileEmail">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <label>
+                    Specialization
+                </label>
+
+                <strong id="profileSpec">
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 
 </main>
@@ -720,318 +999,400 @@
 </div>
 
 
-<div
-    class="toast"
-    id="toast">
+<!-- TOAST -->
+
+<div class="toast"
+     id="toast">
+
 </div>
 
 
 <script>
 
-/* ============================================================
-   LOAD APPOINTMENTS
-============================================================ */
-
-async function loadAppointments() {
-
-    const list =
-        document.getElementById(
-            "appointmentList"
-        );
+let appointments = [];
 
 
-    list.innerHTML = `
-        <div class="empty">
-            <div class="empty-icon">⏳</div>
-            Loading appointments...
-        </div>
-    `;
+/* SECURITY */
 
-
-    try {
-
-        const response =
-            await fetch(
-                "/api/doctor/appointments"
-            );
-
-
-        if (response.status === 401) {
-
-            window.location.href =
-                "/doctor/login";
-
-            return;
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (!data.success) {
-
-            showEmpty(
-                data.message ||
-                "Unable to load appointments."
-            );
-
-            return;
-        }
-
-
-        displayAppointments(
-            data.appointments || []
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        showEmpty(
-            "Unable to connect to the server."
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   DISPLAY APPOINTMENTS
-============================================================ */
-
-function displayAppointments(
-    appointments
-) {
-
-    const list =
-        document.getElementById(
-            "appointmentList"
-        );
-
-
-    updateStatistics(
-        appointments
+const esc = v =>
+    String(v ?? '').replace(
+        /[&<>"']/g,
+        m => ({
+            '&':'&amp;',
+            '<':'&lt;',
+            '>':'&gt;',
+            '"':'&quot;',
+            "'":'&#039;'
+        }[m])
     );
+
+
+/* PAGE NAVIGATION */
+
+function showPage(id) {
+
+    document
+        .querySelectorAll('.page')
+        .forEach(x =>
+            x.classList.remove('active')
+        );
+
+    document
+        .querySelectorAll('.nav')
+        .forEach(x =>
+            x.classList.remove('active')
+        );
+
+    document
+        .getElementById(id)
+        .classList.add('active');
+
+    document
+        .querySelector(
+            `.nav[data-page="${id}"]`
+        )
+        .classList.add('active');
 
 
     if (
-        !appointments ||
-        appointments.length === 0
+        id === 'appointments' ||
+        id === 'patients' ||
+        id === 'consultations'
     ) {
 
-        showEmpty(
-            "No appointments found."
-        );
+        renderTables();
 
-        return;
     }
 
-
-    list.innerHTML = "";
-
-
-    appointments.forEach(
-        appointment => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "appointment";
+}
 
 
-            const status =
-                appointment.status ||
-                "Pending";
+/* SIDEBAR BUTTONS */
+
+document
+    .querySelectorAll('.nav')
+    .forEach(btn => {
+
+        btn.addEventListener(
+            'click',
+            () =>
+                showPage(btn.dataset.page)
+        );
+
+    });
 
 
-            const statusClass =
-                status
-                    .toLowerCase()
-                    .replaceAll(
-                        " ",
-                        "-"
-                    );
+/* TOAST */
 
+function toast(msg) {
 
-            item.innerHTML = `
+    const t =
+        document.getElementById('toast');
 
-                <div class="time">
-                    ${escapeHTML(
-                        appointment.time_slot ||
-                        appointment.time ||
-                        "--"
-                    )}
-                </div>
+    t.textContent = msg;
 
+    t.style.display = 'block';
 
-                <div class="patient">
-
-                    <div class="patient-name">
-                        👤
-                        ${escapeHTML(
-                            appointment.patient_name ||
-                            "Patient"
-                        )}
-                    </div>
-
-                    <div class="reason">
-                        ${escapeHTML(
-                            appointment.reason ||
-                            "No reason provided"
-                        )}
-                    </div>
-
-                </div>
-
-
-                <div class="status-wrapper">
-
-                    <span class="status ${statusClass}">
-                        ${escapeHTML(status)}
-                    </span>
-
-                </div>
-
-
-                <div class="actions">
-
-                    ${
-                        status === "Pending"
-                        ? `
-                            <button
-                                class="btn accept"
-                                onclick="updateAppointment(
-                                    '${escapeJS(appointment.id)}',
-                                    'Confirmed'
-                                )">
-                                ✓ Accept
-                            </button>
-
-                            <button
-                                class="btn reject"
-                                onclick="updateAppointment(
-                                    '${escapeJS(appointment.id)}',
-                                    'Rejected'
-                                )">
-                                ✕ Reject
-                            </button>
-                        `
-                        : ""
-                    }
-
-
-                    <button
-                        class="btn view"
-                        onclick="viewPatient(
-                            '${escapeJS(appointment.id)}'
-                        )">
-                        View Patient
-                    </button>
-
-                </div>
-
-            `;
-
-
-            list.appendChild(item);
-
-        }
+    setTimeout(
+        () => t.style.display = 'none',
+        2500
     );
 
 }
 
 
-/* ============================================================
-   UPDATE APPOINTMENT
-============================================================ */
+/* STATUS BADGE */
 
-async function updateAppointment(
-    appointmentId,
-    status
-) {
+function statusBadge(status) {
 
-    const action =
-        status === "Confirmed"
-        ? "accept"
-        : "reject";
+    const s =
+        status || 'Booked';
 
+    return `
+        <span class="badge ${String(s).toLowerCase()}">
+            ${esc(s)}
+        </span>
+    `;
 
-    const confirmed =
-        confirm(
-            status === "Confirmed"
-            ? "Accept this appointment?"
-            : "Reject this appointment?"
-        );
+}
 
 
-    if (!confirmed) {
-        return;
+/* ACTION BUTTONS */
+
+function actionButtons(a) {
+
+    const s =
+        String(
+            a.status || 'Booked'
+        ).toLowerCase();
+
+    const id =
+        encodeURIComponent(a.id);
+
+
+    if (
+        s === 'booked' ||
+        s === 'scheduled' ||
+        s === 'pending'
+    ) {
+
+        return `
+
+            <button
+                class="btn confirm"
+                onclick="setStatus('${id}','Confirmed')">
+
+                ✓ Confirm
+
+            </button>
+
+            <button
+                class="btn reject"
+                onclick="setStatus('${id}','Rejected')">
+
+                ✕ Reject
+
+            </button>
+
+        `;
+
     }
 
 
+    if (s === 'confirmed') {
+
+        return `
+
+            <button
+                class="btn consult"
+                onclick="openPatient('${id}')">
+
+                🩺 Consult
+
+            </button>
+
+        `;
+
+    }
+
+
+    if (s === 'completed') {
+
+        return `
+
+            <button
+                class="btn view"
+                onclick="openPatient('${id}')">
+
+                View Record
+
+            </button>
+
+        `;
+
+    }
+
+
+    return '—';
+
+}
+
+
+/* OPEN PATIENT */
+
+function openPatient(id) {
+
+    location.href =
+        '/doctor/patient/' + id;
+
+}
+
+
+/* LOAD APPOINTMENTS */
+
+async function loadAppointments() {
+
     try {
 
-        const response =
+        const r =
             await fetch(
-                "/api/doctor/appointment-status",
+                '/api/doctor/appointments',
                 {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        appointment_id:
-                            appointmentId,
-
-                        status:
-                            status
-
-                    })
+                    cache: 'no-store'
                 }
             );
 
 
         const data =
-            await response.json();
+            await r.json();
 
 
-        if (!data.success) {
+        if (
+            !r.ok ||
+            !data.success
+        ) {
 
-            showToast(
+            toast(
                 data.message ||
-                "Unable to update appointment."
+                'Please login again.'
             );
 
             return;
+
         }
 
 
-        showToast(
-            status === "Confirmed"
-            ? "✅ Appointment confirmed."
-            : "❌ Appointment rejected."
-        );
+        appointments =
+            data.appointments || [];
 
 
-        loadAppointments();
+        /* DOCTOR INFORMATION */
+
+        const d =
+            data.doctor || {};
 
 
-    } catch (error) {
+        const name =
+            d.name || 'Doctor';
 
-        console.error(error);
 
-        showToast(
-            "Unable to connect to the server."
+        document
+            .getElementById(
+                'doctorName'
+            )
+            .textContent = name;
+
+
+        document
+            .getElementById(
+                'heroName'
+            )
+            .textContent = name;
+
+
+        document
+            .getElementById(
+                'doctorSpecialization'
+            )
+            .textContent =
+                d.specialization ||
+                'Medical Specialist';
+
+
+        document
+            .getElementById(
+                'avatar'
+            )
+            .textContent =
+                name
+                    .split(/\s+/)
+                    .map(x => x[0])
+                    .slice(0,2)
+                    .join('')
+                    .toUpperCase();
+
+
+        /* PROFILE */
+
+        document
+            .getElementById(
+                'profileId'
+            )
+            .textContent =
+                d.id || '—';
+
+
+        document
+            .getElementById(
+                'profileName'
+            )
+            .textContent =
+                d.name || '—';
+
+
+        document
+            .getElementById(
+                'profileEmail'
+            )
+            .textContent =
+                d.email || '—';
+
+
+        document
+            .getElementById(
+                'profileSpec'
+            )
+            .textContent =
+                d.specialization || '—';
+
+
+        /* STATISTICS */
+
+        document
+            .getElementById(
+                'total'
+            )
+            .textContent =
+                appointments.length;
+
+
+        document
+            .getElementById(
+                'pending'
+            )
+            .textContent =
+                appointments.filter(a => {
+
+                    const s =
+                        String(
+                            a.status ||
+                            'Booked'
+                        ).toLowerCase();
+
+                    return (
+                        s === 'booked' ||
+                        s === 'scheduled' ||
+                        s === 'pending'
+                    );
+
+                }).length;
+
+
+        document
+            .getElementById(
+                'confirmed'
+            )
+            .textContent =
+                appointments.filter(a =>
+                    String(
+                        a.status
+                    ).toLowerCase()
+                    === 'confirmed'
+                ).length;
+
+
+        document
+            .getElementById(
+                'completed'
+            )
+            .textContent =
+                appointments.filter(a =>
+                    String(
+                        a.status
+                    ).toLowerCase()
+                    === 'completed'
+                ).length;
+
+
+        renderTables();
+
+
+    } catch (e) {
+
+        console.error(e);
+
+        toast(
+            'Could not connect to the server.'
         );
 
     }
@@ -1039,215 +1400,448 @@ async function updateAppointment(
 }
 
 
-/* ============================================================
-   VIEW PATIENT
-============================================================ */
+/* RENDER TABLES */
 
-function viewPatient(
-    appointmentId
-) {
+function renderTables() {
 
-    /*
-     * We'll connect this to the Patient Details
-     * page in the next step.
-     */
-
-    window.location.href =
-        "/doctor/patient/" +
-        encodeURIComponent(
-            appointmentId
+    const sorted =
+        [...appointments].sort(
+            (a,b) =>
+                `${a.date || ''} ${a.time_slot || ''}`
+                .localeCompare(
+                    `${b.date || ''} ${b.time_slot || ''}`
+                )
         );
+
+
+    /* HOME */
+
+    const home =
+        sorted.slice(0,8);
+
+
+    document
+        .getElementById(
+            'homeBody'
+        )
+        .innerHTML =
+            home.length
+
+            ?
+
+            home.map(a => `
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            ${esc(
+                                a.patient_name ||
+                                'Patient'
+                            )}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.date || '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.time_slot ||
+                            a.time ||
+                            '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            a.status
+                        )}
+                    </td>
+
+                    <td>
+                        ${actionButtons(a)}
+                    </td>
+
+                </tr>
+
+            `).join('')
+
+            :
+
+            `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty">
+
+                        No appointments yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+    /* APPOINTMENTS */
+
+    document
+        .getElementById(
+            'appointmentBody'
+        )
+        .innerHTML =
+            sorted.length
+
+            ?
+
+            sorted.map(a => `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${esc(
+                                a.patient_name ||
+                                'Patient'
+                            )}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.date || '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.time_slot ||
+                            a.time ||
+                            '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.specialization ||
+                            '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            a.status
+                        )}
+                    </td>
+
+                    <td>
+                        ${actionButtons(a)}
+                    </td>
+
+                </tr>
+
+            `).join('')
+
+            :
+
+            `
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty">
+
+                        No appointments yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+    /* PATIENTS */
+
+    document
+        .getElementById(
+            'patientBody'
+        )
+        .innerHTML =
+            sorted.length
+
+            ?
+
+            sorted.map(a => `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${esc(
+                                a.patient_name ||
+                                'Patient'
+                            )}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.date || '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.time_slot ||
+                            a.time ||
+                            '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            a.status
+                        )}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn view"
+                            onclick="openPatient('${encodeURIComponent(a.id)}')">
+
+                            Open Record
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `).join('')
+
+            :
+
+            `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty">
+
+                        No patients yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+    /* CONSULTATIONS */
+
+    const consult =
+        sorted.filter(a => {
+
+            const s =
+                String(
+                    a.status ||
+                    'Booked'
+                ).toLowerCase();
+
+            return (
+                s === 'confirmed' ||
+                s === 'completed'
+            );
+
+        });
+
+
+    document
+        .getElementById(
+            'consultBody'
+        )
+        .innerHTML =
+            consult.length
+
+            ?
+
+            consult.map(a => `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${esc(
+                                a.patient_name ||
+                                'Patient'
+                            )}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.date || '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${esc(
+                            a.time_slot ||
+                            a.time ||
+                            '-'
+                        )}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            a.status
+                        )}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn consult"
+                            onclick="openPatient('${encodeURIComponent(a.id)}')">
+
+                            🩺
+
+                            ${
+                                String(
+                                    a.status
+                                ).toLowerCase()
+                                === 'completed'
+
+                                ? 'View'
+
+                                : 'Consult'
+                            }
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `).join('')
+
+            :
+
+            `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty">
+
+                        No confirmed consultations yet.
+
+                    </td>
+
+                </tr>
+
+            `;
 
 }
 
 
-/* ============================================================
-   STATISTICS
-============================================================ */
+/* CHANGE APPOINTMENT STATUS */
 
-function updateStatistics(
-    appointments
+async function setStatus(
+    id,
+    status
 ) {
 
-    let pending = 0;
+    try {
 
-    let completed = 0;
+        const r =
+            await fetch(
+                '/api/doctor/appointment-status',
+                {
+                    method: 'POST',
 
-    const patients =
-        new Set();
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+                            appointment_id:
+                                decodeURIComponent(id),
+
+                            status:
+                                status
+                        })
+                }
+            );
 
 
-    appointments.forEach(
-        appointment => {
-
-            const status =
-                appointment.status ||
-                "Pending";
+        const data =
+            await r.json();
 
 
-            if (status === "Pending") {
-                pending++;
-            }
+        toast(
+            data.message ||
+            'Appointment updated.'
+        );
 
 
-            if (status === "Completed") {
-                completed++;
-            }
+        if (data.success) {
 
-
-            if (
-                appointment.patient_id ||
-                appointment.patient_name
-            ) {
-
-                patients.add(
-                    appointment.patient_id ||
-                    appointment.patient_name
-                );
-
-            }
+            await loadAppointments();
 
         }
-    );
 
 
-    document.getElementById(
-        "pendingCount"
-    ).textContent = pending;
+    } catch (e) {
 
+        console.error(e);
 
-    document.getElementById(
-        "completedCount"
-    ).textContent = completed;
-
-
-    document.getElementById(
-        "patientCount"
-    ).textContent =
-        patients.size;
-
-
-    document.getElementById(
-        "todayCount"
-    ).textContent =
-        appointments.length;
-
-}
-
-
-/* ============================================================
-   EMPTY STATE
-============================================================ */
-
-function showEmpty(
-    message
-) {
-
-    document.getElementById(
-        "appointmentList"
-    ).innerHTML = `
-
-        <div class="empty">
-
-            <div class="empty-icon">
-                📅
-            </div>
-
-            ${escapeHTML(message)}
-
-        </div>
-
-    `;
-
-}
-
-
-/* ============================================================
-   TOAST
-============================================================ */
-
-function showToast(
-    message
-) {
-
-    const toast =
-        document.getElementById(
-            "toast"
+        toast(
+            'Unable to update appointment.'
         );
 
-
-    toast.textContent =
-        message;
-
-
-    toast.style.display =
-        "block";
-
-
-    setTimeout(
-        () => {
-            toast.style.display =
-                "none";
-        },
-        3000
-    );
+    }
 
 }
 
 
-/* ============================================================
-   ESCAPE HTML
-============================================================ */
-
-function escapeHTML(
-    value
-) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        value ?? "";
-
-    return div.innerHTML;
-
-}
-
-
-/* ============================================================
-   ESCAPE JAVASCRIPT
-============================================================ */
-
-function escapeJS(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-    .replaceAll(
-        "\\",
-        "\\\\"
-    )
-    .replaceAll(
-        "'",
-        "\\'"
-    );
-
-}
-
-
-/* ============================================================
-   START
-============================================================ */
+/* INITIAL LOAD */
 
 loadAppointments();
+
+
+/* AUTO REFRESH EVERY 30 SECONDS */
+
+setInterval(
+    loadAppointments,
+    30000
+);
 
 </script>
 
 </body>
-
 </html>
-```
