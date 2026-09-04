@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Consultation | MediCare</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#172033}.top{background:#fff;border-bottom:1px solid #e6eaf0;padding:18px 6%;display:flex;justify-content:space-between;align-items:center}.brand{font-size:22px;font-weight:800;color:#1264a3}.wrap{max-width:1100px;margin:30px auto;padding:0 20px}.hero,.card{background:#fff;border:1px solid #e6eaf0;border-radius:18px;box-shadow:0 8px 30px rgba(30,50,80,.06)}.hero{padding:24px;margin-bottom:20px}.hero h1{margin:0 0 8px}.muted{color:#6d7788}.grid{display:grid;grid-template-columns:1fr 1.4fr;gap:20px}.card{padding:22px}.card h2{margin-top:0;font-size:19px}.info{display:grid;grid-template-columns:1fr 1fr;gap:14px}.info div{background:#f7f9fc;padding:13px;border-radius:12px}.label{font-size:12px;color:#718096;text-transform:uppercase}.value{font-weight:700;margin-top:5px}label{display:block;font-weight:700;font-size:13px;margin:14px 0 7px}input,textarea{width:100%;padding:12px;border:1px solid #d9e0e8;border-radius:10px;font:inherit}textarea{min-height:90px;resize:vertical}.medicine{border:1px solid #e1e7ee;border-radius:12px;padding:14px;margin-top:10px}.medicine-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:8px}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:#1264a3;color:white}.secondary{background:#edf4fa;color:#1264a3;margin-top:10px}.save{width:100%;margin-top:18px;font-size:15px}.history-item{border-top:1px solid #edf0f4;padding:16px 0}.history-item:first-child{border-top:0}.pill{display:inline-block;background:#e9f5ee;color:#207544;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}.med{background:#f7f9fc;border-radius:9px;padding:9px;margin:7px 0}.danger{color:#b42318}.back{color:#1264a3;text-decoration:none;font-weight:700}@media(max-width:800px){.grid{grid-template-columns:1fr}.medicine-grid{grid-template-columns:1fr 1fr}.info{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">🏥 MediCare</div><a class="back" href="/doctor/dashboard">← Doctor Dashboard</a></header>
+<main class="wrap">
+<section class="hero">
+<h1>Patient Consultation</h1>
+<div class="muted">Record the consultation, diagnosis and prescription for this appointment.</div>
+</section>
+<div class="grid">
+<section class="card">
+<h2>Patient Information</h2>
+<div class="info">
+<div><div class="label">Patient</div><div class="value">{{ patient.name }}</div></div>
+<div><div class="label">Patient ID</div><div class="value">{{ patient.id or 'N/A' }}</div></div>
+<div><div class="label">Appointment</div><div class="value">{{ appointment.date }}</div></div>
+<div><div class="label">Time</div><div class="value">{{ appointment.time_slot }}</div></div>
+</div>
+<h2 style="margin-top:25px">Previous Visits</h2>
+{% if history %}
+{% for item in history %}
+<div class="history-item">
+<strong>{{ item.date }} · {{ item.doctor_name }}</strong><br>
+<span class="muted">{{ item.status or 'Appointment' }}</span>
+{% if item.consultation_id %}<span class="pill">Consultation recorded</span>{% endif %}
+</div>
+{% endfor %}
+{% else %}<p class="muted">No previous visits found.</p>{% endif %}
+</section>
+<section class="card">
+<h2>Consultation Notes</h2>
+<label for="symptoms">Symptoms / Patient Complaints</label>
+<textarea id="symptoms" placeholder="Describe the patient's symptoms..."></textarea>
+<label for="diagnosis">Diagnosis *</label>
+<textarea id="diagnosis" placeholder="Enter diagnosis / clinical impression..."></textarea>
+<label for="notes">Doctor's Notes</label>
+<textarea id="notes" placeholder="Observations, advice, precautions..." ></textarea>
+<label for="followup">Follow-up Date</label>
+<input id="followup" type="date">
+<h2 style="margin-top:25px">Prescription</h2>
+<div id="medicines"></div>
+<button class="btn secondary" type="button" onclick="addMedicine()">+ Add Medicine</button>
+<button class="btn primary save" type="button" onclick="saveConsultation()">Save Consultation & Complete Appointment</button>
+</section>
+</div>
+</main>
+<script>
+const appointmentId={{ appointment.id|tojson }};
+function addMedicine(){const wrap=document.createElement('div');wrap.className='medicine';wrap.innerHTML=`<div class="medicine-grid"><input class="m-name" placeholder="Medicine name"><input class="m-dose" placeholder="Dosage"><input class="m-frequency" placeholder="Frequency"><input class="m-duration" placeholder="Duration"></div><input class="m-instructions" style="margin-top:8px" placeholder="Instructions (e.g. after food)"><button class="btn" style="margin-top:8px" type="button" onclick="this.parentElement.remove()">Remove</button>`;document.getElementById('medicines').appendChild(wrap)}
+async function saveConsultation(){const diagnosis=document.getElementById('diagnosis').value.trim();if(!diagnosis){alert('Please enter the diagnosis.');return}const prescription=[...document.querySelectorAll('.medicine')].map(x=>({name:x.querySelector('.m-name').value.trim(),dosage:x.querySelector('.m-dose').value.trim(),frequency:x.querySelector('.m-frequency').value.trim(),duration:x.querySelector('.m-duration').value.trim(),instructions:x.querySelector('.m-instructions').value.trim()})).filter(x=>x.name);const payload={appointment_id:appointmentId,symptoms:document.getElementById('symptoms').value.trim(),diagnosis,notes:document.getElementById('notes').value.trim(),follow_up_date:document.getElementById('followup').value,prescription};try{const r=await fetch('/api/doctor/consultation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const x=await r.json();if(!r.ok||!x.success){alert(x.message||'Unable to save consultation.');return}alert('Consultation and prescription saved successfully.');window.location.href='/doctor/dashboard'}catch(e){console.error(e);alert('Unable to connect to the server.')}}
+addMedicine();
+</script>
+</body>
+</html>
